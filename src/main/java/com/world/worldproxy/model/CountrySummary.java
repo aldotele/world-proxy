@@ -1,17 +1,20 @@
 package com.world.worldproxy.model;
 
-public class CountrySummary {
-    private String capital;
 
-    public CountrySummary(String capital) {
-        this.capital = capital;
+import java.io.Serializable;
+
+public class CountrySummary implements Serializable {
+    private String name;
+
+    public CountrySummary(String name) {
+        this.name = name;
     }
 
     public String getCapital() {
-        return capital;
+        return name;
     }
 
-    public void setCapital(String capital) {
-        this.capital = capital;
+    public void setCapital(String name) {
+        this.name = name;
     }
 }
