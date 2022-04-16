@@ -3,10 +3,10 @@ package com.world.worldproxy.model;
 
 import java.io.Serializable;
 
-public class CountrySummary implements Serializable {
+public class Country implements Serializable {
     private String name;
 
-    public CountrySummary(String name) {
+    public Country(String name) {
         this.name = name;
     }
 

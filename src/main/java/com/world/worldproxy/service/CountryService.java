@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 @Service
-public class CountrySummaryService {
+public class CountryService {
 
     RestTemplate restTemplate = new RestTemplate();
 

@@ -1,11 +1,8 @@
 package com.world.worldproxy.controller.maps;
 
 import com.world.worldproxy.service.CountryMapService;
-import com.world.worldproxy.service.CountrySummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 
 @RestController

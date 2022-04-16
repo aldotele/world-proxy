@@ -1,6 +1,5 @@
 package com.world.worldproxy.service;
 
-import com.world.worldproxy.model.CountrySummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
