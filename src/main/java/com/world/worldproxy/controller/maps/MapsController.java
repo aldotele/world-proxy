@@ -1,6 +1,7 @@
 package com.world.worldproxy.controller.maps;
 
 import com.world.worldproxy.service.CountryMapService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ class MapsController {
     }
 
     @GetMapping("/{country}")
-    String getAllCountries(@PathVariable String country) {
+    String getMaps(@PathVariable String country) {
         return countryMapService.getMapsByCountryName(country);
     }
 

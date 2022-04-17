@@ -1,6 +1,8 @@
 package com.world.worldproxy.model;
 
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 public class Country implements Serializable {
@@ -8,6 +10,9 @@ public class Country implements Serializable {
 
     public Country(String name) {
         this.name = name;
+    }
+
+    public Country() {
     }
 
     public String getCapital() {
