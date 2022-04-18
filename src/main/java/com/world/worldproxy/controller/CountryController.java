@@ -1,14 +1,11 @@
-package com.world.worldproxy.controller.summary;
+package com.world.worldproxy.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.world.worldproxy.model.Country;
 import com.world.worldproxy.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,17 +17,27 @@ class CountryController {
     @Autowired
     private final CountryService countryService;
 
-    CountryController(CountryService countrySummaryService) {
-        this.countryService = countrySummaryService;
+    CountryController(CountryService countryService) {
+        this.countryService = countryService;
     }
+
+//    @ExceptionHandler({ CustomException1.class, CustomException2.class })
+//    public void handleException() {
+//        //
+//    }
 
     @GetMapping("/all")
     List<Country> getAllCountries() throws JsonProcessingException {
-        return countryService.getAllCountriesRawData();
+        return countryService.getAllCountries();
     }
 
     @GetMapping("/{name}")
     Country getCountry(@PathVariable String name) throws JsonProcessingException {
         return countryService.getCountryByName(name);
+    }
+
+    @GetMapping("/maps/{country}")
+    String getMaps(@PathVariable String country) {
+        return countryService.getMapsByCountryName(country);
     }
 }
