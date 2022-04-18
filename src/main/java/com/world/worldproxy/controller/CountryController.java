@@ -5,7 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.world.worldproxy.model.Country;
 import com.world.worldproxy.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
@@ -21,10 +23,10 @@ class CountryController {
         this.countryService = countryService;
     }
 
-//    @ExceptionHandler({ CustomException1.class, CustomException2.class })
-//    public void handleException() {
-//        //
-//    }
+    @ExceptionHandler({ HttpClientErrorException.NotFound.class})
+    public String handleNotFoundException() {
+        return "nothing was found";
+    }
 
     @GetMapping("/all")
     List<Country> getAllCountries() throws JsonProcessingException {
