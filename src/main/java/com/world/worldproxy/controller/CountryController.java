@@ -7,6 +7,7 @@ import com.world.worldproxy.model.response.CapitalResponse;
 import com.world.worldproxy.model.response.MapsResponse;
 import com.world.worldproxy.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -26,6 +27,7 @@ class CountryController {
     }
 
     @ExceptionHandler({ HttpClientErrorException.NotFound.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleNotFoundException() {
         return "nothing was found";
     }
