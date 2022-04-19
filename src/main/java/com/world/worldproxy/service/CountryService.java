@@ -9,4 +9,5 @@ public interface CountryService {
     List<Country> getAllCountries() throws JsonProcessingException;
     Country getCountryByName(String name) throws JsonProcessingException;
     String getMapsByCountryName(String country);
+    String getCapitalByCountry(String country) throws  JsonProcessingException;
 }
