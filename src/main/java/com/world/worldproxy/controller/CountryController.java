@@ -3,6 +3,7 @@ package com.world.worldproxy.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.world.worldproxy.model.Country;
+import com.world.worldproxy.model.response.MapsResponse;
 import com.world.worldproxy.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,8 @@ class CountryController {
     }
 
     @GetMapping("/maps/{country}")
-    String getMaps(@PathVariable String country) {
-        return countryService.getMapsByCountryName(country);
+    @ResponseBody
+    MapsResponse getMaps(@PathVariable String country) {
+        return new MapsResponse(countryService.getMapsByCountryName(country));
     }
 }
