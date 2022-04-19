@@ -37,13 +37,13 @@ class CountryController {
 
     @GetMapping("/{name}")
     Country getCountry(@PathVariable String name) throws JsonProcessingException {
-        return countryService.getCountryByName(name);
+        return countryService.getCountry(name);
     }
 
     @GetMapping("/maps/{country}")
     @ResponseBody
     MapsResponse getMaps(@PathVariable String country) {
-        return new MapsResponse(countryService.getMapsByCountryName(country));
+        return new MapsResponse(countryService.getMapsByCountry(country));
     }
 
     @GetMapping("/capital/{country}")

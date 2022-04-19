@@ -35,7 +35,7 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public Country getCountryByName(String name) throws JsonProcessingException {
+    public Country getCountry(String name) throws JsonProcessingException {
         ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + name, String.class);
         JSONArray jsonArray = new JSONArray(response.getBody());
         Country country = objectMapper.readValue(jsonArray.get(0).toString(), Country.class);
@@ -43,7 +43,7 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public String getMapsByCountryName(String country) {
+    public String getMapsByCountry(String country) {
         ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + country, String.class);
         JSONArray jsonArr = new JSONArray(response.getBody());
         JSONObject jsonObj = (JSONObject) jsonArr.get(0);
@@ -52,7 +52,7 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public String getCapitalByCountry(String country) throws JsonProcessingException {
-        return getCountryByName(country).getCapital();
+        return getCountry(country).getCapital();
     }
 
 }
