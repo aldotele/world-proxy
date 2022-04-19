@@ -55,4 +55,9 @@ public class CountryServiceImpl implements CountryService {
         return getCountry(country).getCapital();
     }
 
+    @Override
+    public String getFlagByCountry(String country) throws JsonProcessingException {
+        return getCountry(country).getFlag();
+    }
+
 }
