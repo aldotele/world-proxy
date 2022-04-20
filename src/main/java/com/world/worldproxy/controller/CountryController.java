@@ -43,24 +43,28 @@ class CountryController {
 
     @GetMapping("/{name}")
     Country getCountry(@PathVariable String name) throws JsonProcessingException {
+        log.info("getCountry API called");
         return countryService.getCountry(name);
     }
 
     @GetMapping("/maps/{country}")
     @ResponseBody
     MapsResponse getMaps(@PathVariable String country) {
+        log.info("getMaps API called");
         return new MapsResponse(countryService.getMapsByCountry(country));
     }
 
     @GetMapping("/capital/{country}")
     @ResponseBody
     CapitalResponse getCapital(@PathVariable String country) throws JsonProcessingException {
+        log.info("getCapital API called");
         return new CapitalResponse(countryService.getCapitalByCountry(country));
     }
 
     @GetMapping("flag/{country}")
     @ResponseBody
     FlagResponse getFlag(@PathVariable String country) throws JsonProcessingException {
+        log.info("getFlag API called");
         return new FlagResponse(countryService.getFlagByCountry(country));
     }
 }
