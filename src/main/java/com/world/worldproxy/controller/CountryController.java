@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -61,10 +62,17 @@ class CountryController {
         return new CapitalResponse(countryService.getCapitalByCountry(country));
     }
 
-    @GetMapping("flag/{country}")
+    @GetMapping("/flag/{country}")
     @ResponseBody
     FlagResponse getFlag(@PathVariable String country) throws JsonProcessingException {
         log.info("getFlag API called");
         return new FlagResponse(countryService.getFlagByCountry(country));
+    }
+
+    @GetMapping("/population")
+    List<Country> getCountriesByPopulationRange(@RequestParam BigDecimal minPopulation,
+                                           @RequestParam BigDecimal maxPopulation) throws JsonProcessingException {
+        log.info("getCountriesByPopulation API called");
+        return countryService.getCountriesByPopulationRange(minPopulation, maxPopulation);
     }
 }

@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -58,6 +60,14 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public String getFlagByCountry(String country) throws JsonProcessingException {
         return getCountry(country).getFlag();
+    }
+
+    @Override
+    public List<Country> getCountriesByPopulationRange(BigDecimal minPopulation, BigDecimal maxPopulation) throws JsonProcessingException {
+        List<Country> allCountries = getAllCountries();
+        return allCountries.stream()
+                .filter(country -> country.getPopulation().compareTo(minPopulation) > 0 & country.getPopulation().compareTo(maxPopulation) < 0)
+                .collect(Collectors.toList());
     }
 
 }
