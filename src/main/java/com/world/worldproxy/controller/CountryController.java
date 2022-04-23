@@ -6,6 +6,7 @@ import com.world.worldproxy.model.Country;
 import com.world.worldproxy.model.response.CapitalResponse;
 import com.world.worldproxy.model.response.FlagResponse;
 import com.world.worldproxy.model.response.MapsResponse;
+import com.world.worldproxy.model.response.NeighboursResponse;
 import com.world.worldproxy.service.CountryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,9 +77,9 @@ class CountryController {
         return countryService.getCountriesByPopulationRange(minPopulation, maxPopulation);
     }
 
-    @GetMapping("/adjacent/{country}")
-    List<String> getCountryNeighbours(@PathVariable String country) throws JsonProcessingException {
-        log.info("getCountriesAdjacentToCountry API called");
-        return countryService.getCountryNeighbours(country);
+    @GetMapping("/neighbours/{country}")
+    NeighboursResponse getCountryNeighbours(@PathVariable String country) throws JsonProcessingException {
+        log.info("getCountryNeighbours API called");
+        return new NeighboursResponse(countryService.getCountryNeighbours(country));
     }
 }

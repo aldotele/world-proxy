@@ -75,7 +75,7 @@ public class Country implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    @JsonProperty("cioc")
+    @JsonProperty("cca3")
     private void retrieveShortName(String acronym) {
         this.acronym = acronym;
     }
