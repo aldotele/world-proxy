@@ -71,15 +71,15 @@ class CountryController {
     }
 
     @GetMapping("/population")
-    List<Country> getCountriesByPopulationRange(@RequestParam BigDecimal minPopulation,
-                                           @RequestParam BigDecimal maxPopulation) throws JsonProcessingException {
+    List<Country> getCountriesByPopulationRange(@RequestParam BigDecimal min,
+                                           @RequestParam BigDecimal max) throws JsonProcessingException {
         log.info("getCountriesByPopulation API called");
-        return countryService.getCountriesByPopulationRange(minPopulation, maxPopulation);
+        return countryService.getCountriesByPopulationRange(min, max);
     }
 
     @GetMapping("/neighbours/{country}")
-    NeighboursResponse getCountryNeighbours(@PathVariable String country) throws JsonProcessingException {
+    List<Country> getCountryNeighbours(@PathVariable String country) throws JsonProcessingException {
         log.info("getCountryNeighbours API called");
-        return new NeighboursResponse(countryService.getCountryNeighbours(country));
+        return countryService.getCountryNeighbours(country);
     }
 }

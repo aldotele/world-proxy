@@ -12,6 +12,6 @@ public interface CountryService {
     String getMapsByCountry(String country);
     String getCapitalByCountry(String country) throws  JsonProcessingException;
     String getFlagByCountry(String country) throws JsonProcessingException;
-    List<Country> getCountriesByPopulationRange(BigDecimal minPopulation, BigDecimal maxPopulation) throws JsonProcessingException;
-    List<String> getCountryNeighbours(String country) throws JsonProcessingException;
+    List<Country> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException;
+    List<Country> getCountryNeighbours(String country) throws JsonProcessingException;
 }

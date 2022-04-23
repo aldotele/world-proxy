@@ -65,24 +65,25 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public List<Country> getCountriesByPopulationRange(BigDecimal minPopulation, BigDecimal maxPopulation) throws JsonProcessingException {
+    public List<Country> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException {
         List<Country> allCountries = getAllCountries();
         return allCountries.stream()
-                .filter(country -> country.getPopulation().compareTo(minPopulation) > 0 & country.getPopulation().compareTo(maxPopulation) < 0)
+                .filter(country -> country.getPopulation().compareTo(minimum) > 0 & country.getPopulation().compareTo(maximum) < 0)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<String> getCountryNeighbours(String country) throws JsonProcessingException {
+    public List<Country> getCountryNeighbours(String country) throws JsonProcessingException {
         String acronym = getCountry(country).getAcronym();
         List<Country> allCountries = getAllCountries();
         List<Country> neighbours = allCountries.stream()
                 .filter(c -> Objects.nonNull(c.getBorders()))
                 .filter(cc -> cc.getBorders().contains(acronym))
                 .collect(Collectors.toList());
-        List<String> neighboursNames = neighbours.stream()
-                .map(Country::getName)
-                .collect(Collectors.toList());
-        return neighboursNames;
+        // TODO add to detail low configuration
+//        List<String> neighboursNames = neighbours.stream()
+//                .map(Country::getName)
+//                .collect(Collectors.toList());
+        return neighbours;
     }
 }
