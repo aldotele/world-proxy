@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -70,4 +72,17 @@ public class CountryServiceImpl implements CountryService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<String> getCountryNeighbours(String country) throws JsonProcessingException {
+        String acronym = getCountry(country).getAcronym();
+        List<Country> allCountries = getAllCountries();
+        List<Country> neighbours = allCountries.stream()
+                .filter(c -> Objects.nonNull(c.getBorders()))
+                .filter(cc -> cc.getBorders().contains(acronym))
+                .collect(Collectors.toList());
+        List<String> neighboursNames = neighbours.stream()
+                .map(Country::getName)
+                .collect(Collectors.toList());
+        return neighboursNames;
+    }
 }

@@ -75,4 +75,10 @@ class CountryController {
         log.info("getCountriesByPopulation API called");
         return countryService.getCountriesByPopulationRange(minPopulation, maxPopulation);
     }
+
+    @GetMapping("/adjacent/{country}")
+    List<String> getCountryNeighbours(@PathVariable String country) throws JsonProcessingException {
+        log.info("getCountriesAdjacentToCountry API called");
+        return countryService.getCountryNeighbours(country);
+    }
 }

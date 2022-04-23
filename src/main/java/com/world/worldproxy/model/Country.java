@@ -15,7 +15,7 @@ import java.util.Map;
 public class Country implements Serializable {
     private String name;
     private String officialName;
-    private String shortName;
+    private String acronym;
     private String capital;
     private List<String> borders;
     private String maps;
@@ -76,7 +76,7 @@ public class Country implements Serializable {
 
     @SuppressWarnings("unchecked")
     @JsonProperty("cioc")
-    private void retrieveShortName(String shortName) {
-        this.shortName = shortName;
+    private void retrieveShortName(String acronym) {
+        this.acronym = acronym;
     }
 }
