@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.world.worldproxy.exception.QueryParameterException;
 import com.world.worldproxy.model.Country;
 import com.world.worldproxy.model.response.CapitalResponse;
+import com.world.worldproxy.model.response.CurrencyResponse;
 import com.world.worldproxy.model.response.FlagResponse;
 import com.world.worldproxy.model.response.MapsResponse;
 import com.world.worldproxy.service.CountryService;
@@ -68,6 +69,13 @@ class CountryController {
         return new CapitalResponse(countryService.getCapitalByCountry(country));
     }
 
+    @GetMapping("/currency/{country}")
+    @ResponseBody
+    CurrencyResponse getCurrency(@PathVariable String country) throws JsonProcessingException {
+        log.info("getCapital API called");
+        return new CurrencyResponse(countryService.getCurrencyByCountry(country));
+    }
+
     @GetMapping("/flag/{country}")
     @ResponseBody
     FlagResponse getFlag(@PathVariable String country) throws JsonProcessingException {
@@ -83,7 +91,7 @@ class CountryController {
     }
 
     @GetMapping("/neighbours/{country}")
-    List<Country> getCountryNeighbours(@PathVariable String country) throws JsonProcessingException {
+    List<Country> getNeighbours(@PathVariable String country) throws JsonProcessingException {
         log.info("getCountryNeighbours API called");
         return countryService.getCountryNeighbours(country);
     }

@@ -61,6 +61,11 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
+    public List<String> getCurrencyByCountry(String country) throws  JsonProcessingException {
+        return getCountry(country).getCurrencies();
+    }
+
+    @Override
     public String getFlagByCountry(String country) throws JsonProcessingException {
         return getCountry(country).getFlag();
     }
