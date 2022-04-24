@@ -2,6 +2,7 @@ package com.world.worldproxy.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.world.worldproxy.exception.QueryParameterException;
 import com.world.worldproxy.model.Country;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -65,11 +66,32 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public List<Country> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException {
+    public List<Country> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException, QueryParameterException {
         List<Country> allCountries = getAllCountries();
-        return allCountries.stream()
-                .filter(country -> country.getPopulation().compareTo(minimum) > 0 & country.getPopulation().compareTo(maximum) < 0)
-                .collect(Collectors.toList());
+        // both min and max provided
+        if (minimum != null & maximum != null) {
+            if (minimum.compareTo(maximum) > 0) {
+                throw new QueryParameterException("population range is not valid.");
+            }
+            return allCountries.stream()
+                    .filter(country -> country.getPopulation().compareTo(minimum) > 0 & country.getPopulation().compareTo(maximum) < 0)
+                    .collect(Collectors.toList());
+        }
+        // only min provided
+        else if (minimum != null & maximum == null) {
+            return allCountries.stream()
+                    .filter(country -> country.getPopulation().compareTo(minimum) > 0)
+                    .collect(Collectors.toList());
+        }
+        // only max provided
+        else if (maximum != null & minimum == null) {
+            return allCountries.stream()
+                    .filter(country -> country.getPopulation().compareTo(maximum) < 0)
+                    .collect(Collectors.toList());
+        }
+        else {
+            throw new QueryParameterException("at least one parameter between min and max population is required.");
+        }
     }
 
     @Override

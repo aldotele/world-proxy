@@ -1,6 +1,7 @@
 package com.world.worldproxy.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.world.worldproxy.exception.QueryParameterException;
 import com.world.worldproxy.model.Country;
 
 import java.math.BigDecimal;
@@ -12,6 +13,6 @@ public interface CountryService {
     String getMapsByCountry(String country);
     String getCapitalByCountry(String country) throws  JsonProcessingException;
     String getFlagByCountry(String country) throws JsonProcessingException;
-    List<Country> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException;
+    List<Country> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException, QueryParameterException;
     List<Country> getCountryNeighbours(String country) throws JsonProcessingException;
 }

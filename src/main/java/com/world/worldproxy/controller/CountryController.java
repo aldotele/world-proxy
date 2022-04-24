@@ -2,16 +2,15 @@ package com.world.worldproxy.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.world.worldproxy.exception.QueryParameterException;
 import com.world.worldproxy.model.Country;
 import com.world.worldproxy.model.response.CapitalResponse;
 import com.world.worldproxy.model.response.FlagResponse;
 import com.world.worldproxy.model.response.MapsResponse;
-import com.world.worldproxy.model.response.NeighboursResponse;
 import com.world.worldproxy.service.CountryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -33,8 +32,14 @@ class CountryController {
 
     @ExceptionHandler({ HttpClientErrorException.NotFound.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleNotFoundException() {
+    public String handleNotFoundError() {
         return "nothing was found";
+    }
+
+    @ExceptionHandler({ QueryParameterException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleQueryParameterError(Exception e) {
+        return e.getMessage();
     }
 
     @GetMapping("/all")
@@ -71,8 +76,8 @@ class CountryController {
     }
 
     @GetMapping("/population")
-    List<Country> getCountriesByPopulationRange(@RequestParam BigDecimal min,
-                                           @RequestParam BigDecimal max) throws JsonProcessingException {
+    List<Country> getCountriesByPopulationRange(@RequestParam(required = false) BigDecimal min,
+                                           @RequestParam(required = false) BigDecimal max) throws JsonProcessingException, QueryParameterException {
         log.info("getCountriesByPopulation API called");
         return countryService.getCountriesByPopulationRange(min, max);
     }
