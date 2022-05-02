@@ -17,4 +17,5 @@ public interface CountryService {
     List<Country> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException, QueryParameterException;
     List<Country> getCountryNeighbours(String country) throws JsonProcessingException;
     List<String> getLanguageByCountry(String country) throws JsonProcessingException;
+    List<String> getTranslationsByCountry(String country) throws JsonProcessingException;
 }

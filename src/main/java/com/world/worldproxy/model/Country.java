@@ -24,6 +24,7 @@ public class Country implements Serializable {
     private List<String> continents;
     private String flag;
     private List<String> languages;
+    private List<String> translations;
 
     @SuppressWarnings("unchecked")
     @JsonProperty("name")
@@ -78,5 +79,16 @@ public class Country implements Serializable {
     @JsonProperty("cca3")
     private void retrieveShortName(String acronym) {
         this.acronym = acronym;
+    }
+
+    @JsonProperty("translations")
+    private void retrieveTranslations(Map<String,Object> translations) {
+        List<String> translationKeys = translations.keySet().stream().toList();
+        List<String> output = new ArrayList<>();
+        for (String translationKey: translationKeys) {
+            Map<String, String> inner = (Map<String, String>) translations.get(translationKey);
+            output.add(inner.get("common"));
+        }
+        this.translations = output;
     }
 }

@@ -117,4 +117,9 @@ public class CountryServiceImpl implements CountryService {
     public List<String> getLanguageByCountry(String country) throws JsonProcessingException {
         return getCountry(country).getLanguages();
     }
+
+    @Override
+    public List<String> getTranslationsByCountry(String country) throws JsonProcessingException {
+        return getCountry(country).getTranslations();
+    }
 }
