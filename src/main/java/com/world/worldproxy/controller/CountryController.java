@@ -4,10 +4,7 @@ package com.world.worldproxy.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.world.worldproxy.exception.QueryParameterException;
 import com.world.worldproxy.model.Country;
-import com.world.worldproxy.model.response.CapitalResponse;
-import com.world.worldproxy.model.response.CurrencyResponse;
-import com.world.worldproxy.model.response.FlagResponse;
-import com.world.worldproxy.model.response.MapsResponse;
+import com.world.worldproxy.model.response.*;
 import com.world.worldproxy.service.CountryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +69,7 @@ class CountryController {
     @GetMapping("/currency/{country}")
     @ResponseBody
     CurrencyResponse getCurrency(@PathVariable String country) throws JsonProcessingException {
-        log.info("getCapital API called");
+        log.info("getCurrency API called");
         return new CurrencyResponse(countryService.getCurrencyByCountry(country));
     }
 
@@ -92,7 +89,13 @@ class CountryController {
 
     @GetMapping("/neighbours/{country}")
     List<Country> getNeighbours(@PathVariable String country) throws JsonProcessingException {
-        log.info("getCountryNeighbours API called");
+        log.info("getNeighbours API called");
         return countryService.getCountryNeighbours(country);
+    }
+
+    @GetMapping("/language/{country}")
+    LanguageResponse getLanguage(@PathVariable String country) throws JsonProcessingException {
+        log.info("getLanguage API called");
+        return new LanguageResponse(countryService.getLanguageByCountry(country));
     }
 }

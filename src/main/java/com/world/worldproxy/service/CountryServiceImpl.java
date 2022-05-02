@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -112,5 +111,10 @@ public class CountryServiceImpl implements CountryService {
 //                .map(Country::getName)
 //                .collect(Collectors.toList());
         return neighbours;
+    }
+
+    @Override
+    public List<String> getLanguageByCountry(String country) throws JsonProcessingException {
+        return getCountry(country).getLanguages();
     }
 }
