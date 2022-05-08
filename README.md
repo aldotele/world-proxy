@@ -1,2 +1,7 @@
 ## World Proxy
-proxying requests to [REST Countries](https://restcountries.com/) endpoints
+
+#### proxying requests to [REST Countries](https://restcountries.com/) endpoints
+
+the service exposes a series of APIs to retrieve
+information about world countries, such as name, capital,
+borders, continent, currencies, population, maps, flag.
