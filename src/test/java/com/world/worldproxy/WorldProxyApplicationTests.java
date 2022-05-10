@@ -1,16 +1,9 @@
 package com.world.worldproxy;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.world.worldproxy.controller.CountryController;
-import com.world.worldproxy.model.Country;
 import com.world.worldproxy.service.CountryService;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -18,8 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,7 +23,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @WebMvcTest(CountryController.class)
@@ -54,7 +46,6 @@ class WorldProxyApplicationTests {
 
 	@Value("${restcountries.base.url}")
 	String restCountriesBaseUrl;
-
 
 
 	@Test
@@ -79,7 +70,13 @@ class WorldProxyApplicationTests {
 				.andExpect(jsonPath("$.languages[0]").value("Italian"))
 				.andExpect(jsonPath("$.continents[0]").value("Europe"))
 				.andExpect(jsonPath("$..translations[*]").isNotEmpty())
+				.andExpect(jsonPath("$.population").isNumber())
 				.andReturn();
+	}
+
+	@Test
+	public void getAllCountries() throws Exception {
+
 	}
 
 }
