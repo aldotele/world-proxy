@@ -104,4 +104,10 @@ public class CountryController {
         log.info("getTranslations API called");
         return new TranslationResponse(countryService.getTranslationsByCountry(country));
     }
+
+    @GetMapping("/speak/{language}")
+    List<Country> getCountriesByLanguage(@PathVariable String language) throws JsonProcessingException {
+        log.info("getCountriesByLanguage API called");
+        return countryService.getCountriesByLanguage(language);
+    }
 }

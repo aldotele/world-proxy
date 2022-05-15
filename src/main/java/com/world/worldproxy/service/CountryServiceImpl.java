@@ -115,6 +115,16 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
+    public List<Country> getCountriesByLanguage(String language) throws JsonProcessingException {
+        String capitalized = Character.toUpperCase(language.charAt(0)) + language.substring(1).toLowerCase();
+        List<Country> all = getAllCountries();
+        return all.stream()
+                .filter(country -> country.getLanguages() != null)
+                .filter(country -> country.getLanguages().contains(capitalized))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<String> getLanguageByCountry(String country) throws JsonProcessingException {
         return getCountry(country).getLanguages();
     }
