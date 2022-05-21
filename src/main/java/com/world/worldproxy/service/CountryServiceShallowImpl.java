@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,9 +21,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
+@Profile("shallow")
+@Primary
 @Service
-public class CountryServiceImpl implements CountryService {
-
+public class CountryServiceShallowImpl implements CountryService {
     @Autowired
     RestTemplate restTemplate;
 
@@ -69,8 +72,7 @@ public class CountryServiceImpl implements CountryService {
         return getCountry(country).getFlag();
     }
 
-    @Override
-    public List<Country> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException, QueryParameterException {
+    @Override public List<String> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException, QueryParameterException {
         List<Country> allCountries = getAllCountries();
         // both min and max provided
         if (minimum != null & maximum != null) {
@@ -79,18 +81,21 @@ public class CountryServiceImpl implements CountryService {
             }
             return allCountries.stream()
                     .filter(country -> country.getPopulation().compareTo(minimum) > 0 & country.getPopulation().compareTo(maximum) < 0)
+                    .map(Country::getName)
                     .collect(Collectors.toList());
         }
         // only min provided
         else if (minimum != null & maximum == null) {
             return allCountries.stream()
                     .filter(country -> country.getPopulation().compareTo(minimum) > 0)
+                    .map(Country::getName)
                     .collect(Collectors.toList());
         }
         // only max provided
         else if (maximum != null & minimum == null) {
             return allCountries.stream()
                     .filter(country -> country.getPopulation().compareTo(maximum) < 0)
+                    .map(Country::getName)
                     .collect(Collectors.toList());
         }
         else {
@@ -99,27 +104,24 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public List<Country> getCountryNeighbours(String country) throws JsonProcessingException {
+    public List<String> getCountryNeighbours(String country) throws JsonProcessingException {
         String acronym = getCountry(country).getAcronym();
         List<Country> allCountries = getAllCountries();
-        List<Country> neighbours = allCountries.stream()
+        return allCountries.stream()
                 .filter(c -> Objects.nonNull(c.getBorders()))
                 .filter(cc -> cc.getBorders().contains(acronym))
+                .map(Country::getName)
                 .collect(Collectors.toList());
-        // TODO add to detail low configuration
-//        List<String> neighboursNames = neighbours.stream()
-//                .map(Country::getName)
-//                .collect(Collectors.toList());
-        return neighbours;
     }
 
     @Override
-    public List<Country> getCountriesByLanguage(String language) throws JsonProcessingException {
+    public List<String> getCountriesByLanguage(String language) throws JsonProcessingException {
         String capitalized = Character.toUpperCase(language.charAt(0)) + language.substring(1).toLowerCase();
         List<Country> all = getAllCountries();
         return all.stream()
                 .filter(country -> country.getLanguages() != null)
                 .filter(country -> country.getLanguages().contains(capitalized))
+                .map(Country::getName)
                 .collect(Collectors.toList());
     }
 

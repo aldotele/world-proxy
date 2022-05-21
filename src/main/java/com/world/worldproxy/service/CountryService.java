@@ -14,9 +14,9 @@ public interface CountryService {
     String getCapitalByCountry(String country) throws  JsonProcessingException;
     List<String> getCurrencyByCountry(String country) throws  JsonProcessingException;
     String getFlagByCountry(String country) throws JsonProcessingException;
-    List<Country> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException, QueryParameterException;
-    List<Country> getCountryNeighbours(String country) throws JsonProcessingException;
-    List<Country> getCountriesByLanguage(String language) throws JsonProcessingException;
+    <T> List<T> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException, QueryParameterException;
+    <T> List<T> getCountryNeighbours(String country) throws JsonProcessingException;
+    <T> List<T> getCountriesByLanguage(String language) throws JsonProcessingException;
     List<String> getLanguageByCountry(String country) throws JsonProcessingException;
     List<String> getTranslationsByCountry(String country) throws JsonProcessingException;
 }
