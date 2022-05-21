@@ -2,6 +2,7 @@ package com.world.worldproxy.model;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,15 +14,20 @@ import java.util.Map;
 
 @Data
 public class Country implements Serializable {
+    @Schema(example = "Italy")
     private String name;
+    @Schema(example = "Italian Republic")
     private String officialName;
+    @Schema(example = "ITA")
     private String acronym;
     private String capital;
     private List<String> borders;
+    @Schema(example = "https://goo.gl/maps/8M1K27TDj7StTRTq8")
     private String maps;
     private List<String> currencies;
     private BigDecimal population;
     private List<String> continents;
+    @Schema(example = "https://flagcdn.com/it.svg")
     private String flag;
     private List<String> languages;
     private List<String> translations;
