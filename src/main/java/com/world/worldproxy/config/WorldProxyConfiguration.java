@@ -11,5 +11,4 @@ public class WorldProxyConfiguration {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
-
 }
