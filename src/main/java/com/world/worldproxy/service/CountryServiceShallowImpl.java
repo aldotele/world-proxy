@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.exception.QueryParameterException;
 import com.world.worldproxy.model.Country;
+import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,14 @@ public class CountryServiceShallowImpl implements CountryService {
     @Override
     public String getFlagByCountry(String country) throws JsonProcessingException {
         return getCountry(country).getFlag();
+    }
+
+    @Override
+    public List<String> getCountriesByContinent(String continent) throws JsonProcessingException {
+        return getAllCountries().stream()
+                .filter(country -> country.getContinents().contains(WordUtils.capitalizeFully(continent)))
+                .map(Country::getName)
+                .collect(Collectors.toList());
     }
 
     @Override public List<String> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException, QueryParameterException {

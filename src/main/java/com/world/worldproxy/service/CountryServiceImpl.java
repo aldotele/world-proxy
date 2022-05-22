@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.exception.QueryParameterException;
 import com.world.worldproxy.model.Country;
+import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,13 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
+    public List<Country> getCountriesByContinent(String continent) throws JsonProcessingException {
+        return getAllCountries().stream()
+                .filter(country -> country.getContinents().contains(WordUtils.capitalizeFully(continent)))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Country> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException, QueryParameterException {
         List<Country> allCountries = getAllCountries();
         // both min and max provided
@@ -107,9 +115,6 @@ public class CountryServiceImpl implements CountryService {
                 .filter(cc -> cc.getBorders().contains(acronym))
                 .collect(Collectors.toList());
         // TODO add to detail low configuration
-//        List<String> neighboursNames = neighbours.stream()
-//                .map(Country::getName)
-//                .collect(Collectors.toList());
         return neighbours;
     }
 

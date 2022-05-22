@@ -88,6 +88,12 @@ public class CountryController {
         return countryService.getCountriesByPopulationRange(min, max);
     }
 
+    @Operation(description = "Get countries by continent")
+    @GetMapping("/in/{continent}")
+    List<Country> getCountriesByPopulationRange(@PathVariable String continent) throws JsonProcessingException {
+        return countryService.getCountriesByContinent(continent);
+    }
+
     @Operation(description = "Get neighbours of a country")
     @GetMapping("/neighbours/{country}")
     List<Country> getNeighbours(@PathVariable String country) throws JsonProcessingException {
