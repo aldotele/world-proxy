@@ -1,8 +1,12 @@
 package com.world.worldproxy;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.controller.CountryController;
+import com.world.worldproxy.model.Country;
 import com.world.worldproxy.service.CountryService;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -16,12 +20,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -70,13 +76,26 @@ class WorldProxyApplicationTests {
 				.andExpect(jsonPath("$.languages[0]").value("Italian"))
 				.andExpect(jsonPath("$.continents[0]").value("Europe"))
 				.andExpect(jsonPath("$..translations[*]").isNotEmpty())
-				.andExpect(jsonPath("$.population").isNumber())
-				.andReturn();
+				.andExpect(jsonPath("$.population").isNumber());
 	}
 
 	@Test
+	@Disabled
 	public void getAllCountries() throws Exception {
+		String stubbedJsonResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+		Mockito.when(restTemplate.getForEntity(restCountriesBaseUrl + "/all", String.class))
+				.thenReturn(new ResponseEntity<>(stubbedJsonResponse, HttpStatus.OK));
 
+		MvcResult result = mockmvc.perform(MockMvcRequestBuilders
+				.get("/country/all")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		String response = result.getResponse().getContentAsString();
+		List<Country> countriesResponse =  objectMapper.readValue(response, new TypeReference<List<Country>>() {});
+
+		Assertions.assertEquals(3, countriesResponse.size());
 	}
 
 }

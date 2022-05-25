@@ -1,0 +1,147 @@
+[
+  {
+    "name": "Ghana",
+    "officialName": "Republic of Ghana",
+    "acronym": "GHA",
+    "capital": "Accra",
+    "borders": [
+      "BFA",
+      "CIV",
+      "TGO"
+    ],
+    "maps": "https://goo.gl/maps/Avy5RSmdsXFBaiXq8",
+    "currencies": [
+      "Ghanaian cedi (₵)"
+    ],
+    "population": 31072945,
+    "continents": [
+      "Africa"
+    ],
+    "flag": "https://flagcdn.com/gh.svg",
+    "languages": [
+      "English"
+    ],
+    "translations": [
+      "غانا",
+      "Ghana",
+      "Ghana",
+      "Ghana",
+      "Ghana",
+      "Ghana",
+      "Ghana",
+      "Gana",
+      "Ghána",
+      "Ghana",
+      "ガーナ",
+      "가나",
+      "Ghana",
+      "غنا",
+      "Ghana",
+      "Gana",
+      "Гана",
+      "Ghana",
+      "Ghana",
+      "Ghana",
+      "گھانا",
+      "加纳"
+    ]
+  },
+  {
+    "name": "Italy",
+    "officialName": "Italian Republic",
+    "acronym": "ITA",
+    "capital": "Rome",
+    "borders": [
+      "AUT",
+      "FRA",
+      "SMR",
+      "SVN",
+      "CHE",
+      "VAT"
+    ],
+    "maps": "https://goo.gl/maps/8M1K27TDj7StTRTq8",
+    "currencies": [
+      "Euro (€)"
+    ],
+    "population": 59554023,
+    "continents": [
+      "Europe"
+    ],
+    "flag": "https://flagcdn.com/it.svg",
+    "languages": [
+      "Italian"
+    ],
+    "translations": [
+      "إيطاليا",
+      "Itálie",
+      "Italy",
+      "Italien",
+      "Itaalia",
+      "Italia",
+      "Italie",
+      "Italija",
+      "Olaszország",
+      "Italia",
+      "イタリア",
+      "이탈리아",
+      "Italië",
+      "ایتالیا",
+      "Włochy",
+      "Itália",
+      "Италия",
+      "Taliansko",
+      "Italia",
+      "Italien",
+      "اطالیہ",
+      "意大利"
+    ]
+  },
+  {
+    "name": "Cambodia",
+    "officialName": "Kingdom of Cambodia",
+    "acronym": "KHM",
+    "capital": "Phnom Penh",
+    "borders": [
+      "LAO",
+      "THA",
+      "VNM"
+    ],
+    "maps": "https://goo.gl/maps/nztQtFSrUXZymJaW8",
+    "currencies": [
+      "Cambodian riel (៛)",
+      "United States dollar ($)"
+    ],
+    "population": 16718971,
+    "continents": [
+      "Asia"
+    ],
+    "flag": "https://flagcdn.com/kh.svg",
+    "languages": [
+      "Khmer"
+    ],
+    "translations": [
+      "كمبوديا",
+      "Kambodža",
+      "Cambodia",
+      "Kambodscha",
+      "Kambodža",
+      "Kambodža",
+      "Cambodge",
+      "Kambodža",
+      "Kambodzsa",
+      "Cambogia",
+      "カンボジア",
+      "캄보디아",
+      "Cambodja",
+      "کامبوج",
+      "Kambodża",
+      "Camboja",
+      "Камбоджа",
+      "Kamboǆa",
+      "Camboya",
+      "Kambodja",
+      "کمبوڈیا",
+      "柬埔寨"
+    ]
+  }
+]
