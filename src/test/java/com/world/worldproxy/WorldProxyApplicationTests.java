@@ -71,6 +71,7 @@ class WorldProxyApplicationTests {
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.name").value("Italy"))
+				.andExpect(jsonPath("officialName").value("Italian Republic"))
 				.andExpect(jsonPath("$.acronym").value("ITA"))
 				.andExpect(jsonPath("$.capital").value("Rome"))
 				.andExpect(jsonPath("$.languages[0]").value("Italian"))
