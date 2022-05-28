@@ -9,9 +9,7 @@ import com.world.worldproxy.service.CountryService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,18 +25,6 @@ public class CountryController {
 
     CountryController(CountryService countryService) {
         this.countryService = countryService;
-    }
-
-    @ExceptionHandler({HttpClientErrorException.NotFound.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleNotFoundError() {
-        return "nothing was found";
-    }
-
-    @ExceptionHandler({ QueryParameterException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleQueryParameterError(Exception e) {
-        return e.getMessage();
     }
 
     @Operation(description = "Get all countries")
