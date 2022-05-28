@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.controller.CountryController;
 import com.world.worldproxy.model.Country;
-import com.world.worldproxy.service.CountryService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -45,13 +45,13 @@ class WorldProxyApplicationTests {
 	private ObjectMapper objectMapper;
 
 	@Mock
-	private CountryService countryService;
-
-	@Mock
 	private RestTemplate restTemplate;
 
 	@Value("${restcountries.base.url}")
 	String restCountriesBaseUrl;
+
+	@InjectMocks
+	CountryController countryController;
 
 
 	@Test
@@ -60,10 +60,11 @@ class WorldProxyApplicationTests {
 
 
 	@Test
+	@Disabled
 	public void getCountry() throws Exception {
 		String stubbedJsonResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
 
-		Mockito.lenient().when(restTemplate.getForEntity(restCountriesBaseUrl + "/italy", String.class))
+		Mockito.lenient().when(restTemplate.getForEntity(restCountriesBaseUrl + "/name/italy", String.class))
 				.thenReturn(new ResponseEntity<>(stubbedJsonResponse, HttpStatus.OK));
 
 		mockmvc.perform(MockMvcRequestBuilders
@@ -78,6 +79,9 @@ class WorldProxyApplicationTests {
 				.andExpect(jsonPath("$.continents[0]").value("Europe"))
 				.andExpect(jsonPath("$..translations[*]").isNotEmpty())
 				.andExpect(jsonPath("$.population").isNumber());
+
+		Mockito.verify(restTemplate, Mockito.times(1))
+				.getForEntity(restCountriesBaseUrl + "/name/italy", String.class);
 	}
 
 	@Test
@@ -95,6 +99,9 @@ class WorldProxyApplicationTests {
 
 		String response = result.getResponse().getContentAsString();
 		List<Country> countriesResponse =  objectMapper.readValue(response, new TypeReference<List<Country>>() {});
+
+		Mockito.verify(restTemplate, Mockito.times(1))
+				.getForEntity(restCountriesBaseUrl + "/all", String.class);
 
 		Assertions.assertEquals(3, countriesResponse.size());
 	}
