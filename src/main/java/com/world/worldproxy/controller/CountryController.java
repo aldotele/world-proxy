@@ -35,7 +35,7 @@ public class CountryController {
 
     @Operation(description = "Get single country by name")
     @GetMapping("/{name}")
-    Country getCountry(@PathVariable() String name) throws JsonProcessingException {
+    Country getCountry(@PathVariable String name) throws JsonProcessingException {
         return countryService.getCountry(name);
     }
 
