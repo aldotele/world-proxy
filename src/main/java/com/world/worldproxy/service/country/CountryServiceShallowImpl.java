@@ -1,4 +1,4 @@
-package com.world.worldproxy.service;
+package com.world.worldproxy.service.country;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
