@@ -46,6 +46,13 @@ public class CountryController {
         return new MapsResponse(countryService.getMapsByCountry(country));
     }
 
+    @Operation(description = "Get all world capitals")
+    @GetMapping("/capital/all")
+    @ResponseBody
+    List<String> getAllCapitals(@RequestParam(required = false) String continent) throws JsonProcessingException {
+        return countryService.getAllCapitals(continent);
+    }
+
     @Operation(description = "Get capital by country name")
     @GetMapping("/capital/{country}")
     @ResponseBody

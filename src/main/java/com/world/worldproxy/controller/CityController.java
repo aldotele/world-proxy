@@ -22,7 +22,7 @@ public class CityController {
         this.cityService = cityService;
     }
 
-    @Operation(description = "Get single city by name")
+    @Operation(description = "Retrieve city information by name")
     @GetMapping("/{name}")
     City getCity(@PathVariable String name) throws JsonProcessingException, CityNotFound {
         return cityService.getCity(name);

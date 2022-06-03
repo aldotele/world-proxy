@@ -56,6 +56,21 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
+    public List<String> getAllCapitals(String continent) throws JsonProcessingException {
+        return continent != null ?
+
+                getCountriesByContinent(continent).stream()
+                .map(Country::getCapital)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList()) :
+
+                getAllCountries().stream()
+                        .map(Country::getCapital)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
+    }
+
+    @Override
     public String getCapitalByCountry(String country) throws JsonProcessingException {
         return getCountry(country).getCapital();
     }

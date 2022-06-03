@@ -59,6 +59,22 @@ public class CountryServiceShallowImpl implements CountryService {
     }
 
     @Override
+    public List<String> getAllCapitals(String continent) throws JsonProcessingException {
+        return continent != null ?
+
+                getAllCountries().stream()
+                        .filter(country -> country.getContinents().contains(WordUtils.capitalizeFully(continent)))
+                        .map(Country::getCapital)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList()) :
+
+                getAllCountries().stream()
+                        .map(Country::getCapital)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
+    }
+
+    @Override
     public String getCapitalByCountry(String country) throws JsonProcessingException {
         return getCountry(country).getCapital();
     }

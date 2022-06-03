@@ -11,6 +11,7 @@ public interface CountryService {
     List<Country> getAllCountries() throws JsonProcessingException;
     Country getCountry(String name) throws JsonProcessingException;
     String getMapsByCountry(String country);
+    List<String> getAllCapitals(String continent) throws JsonProcessingException;
     String getCapitalByCountry(String country) throws  JsonProcessingException;
     List<String> getCurrencyByCountry(String country) throws  JsonProcessingException;
     String getFlagByCountry(String country) throws JsonProcessingException;
