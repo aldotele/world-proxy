@@ -60,9 +60,9 @@ public class CountryServiceImpl implements CountryService {
         return continent != null ?
 
                 getCountriesByContinent(continent).stream()
-                .map(Country::getCapital)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList()) :
+                    .map(Country::getCapital)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList()) :
 
                 getAllCountries().stream()
                         .map(Country::getCapital)
