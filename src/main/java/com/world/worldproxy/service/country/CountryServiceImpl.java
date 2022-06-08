@@ -129,7 +129,6 @@ public class CountryServiceImpl implements CountryService {
                 .filter(c -> Objects.nonNull(c.getBorders()))
                 .filter(cc -> cc.getBorders().contains(acronym))
                 .collect(Collectors.toList());
-        // TODO add to detail low configuration
         return neighbours;
     }
 
