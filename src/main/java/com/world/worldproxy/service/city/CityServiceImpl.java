@@ -1,6 +1,7 @@
 package com.world.worldproxy.service.city;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.error.CityNotFound;
 import com.world.worldproxy.model.City;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 
 @Service
@@ -31,9 +34,12 @@ public class CityServiceImpl implements CityService {
     @Value("${api.ninjas.api.key}")
     String apiNinjaApiKey;
 
+    @Value("${countrycity.base.url}")
+    String countryCityBaseUrl;
+
 
     @Override
-    public City getCity(String name) throws JsonProcessingException, CityNotFound {
+    public City getCityData(String name) throws JsonProcessingException, CityNotFound {
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Api-Key", apiNinjaApiKey);
         HttpEntity<String> requestEntity = new HttpEntity<>("parameters", headers);
@@ -50,5 +56,13 @@ public class CityServiceImpl implements CityService {
         } catch (JSONException e) {
             throw new CityNotFound();
         }
+    }
+
+    @Override
+    public List<String> getCities(String country) throws JsonProcessingException {
+        ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + country, String.class);
+
+        List<String> cities = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+        return cities;
     }
 }

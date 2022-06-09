@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.world.worldproxy.error.CityNotFound;
 import com.world.worldproxy.model.City;
 
+import java.util.List;
+
 public interface CityService {
-    City getCity(String name) throws JsonProcessingException, CityNotFound;
+    City getCityData(String name) throws JsonProcessingException, CityNotFound;
+    List<String> getCities(String country) throws JsonProcessingException;
 }
