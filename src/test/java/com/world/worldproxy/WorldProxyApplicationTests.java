@@ -19,6 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -36,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(CountryController.class)
 @ExtendWith(MockitoExtension.class)
 @ComponentScan({"com.world.worldproxy.service", "com.world.worldproxy.config"})
+@ActiveProfiles(profiles = "shallow")
 class WorldProxyApplicationTests {
 
 	@Autowired
@@ -60,7 +62,6 @@ class WorldProxyApplicationTests {
 
 
 	@Test
-	@Disabled
 	public void getCountry() throws Exception {
 		String stubbedJsonResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
 
