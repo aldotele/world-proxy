@@ -5,12 +5,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.error.CityNotFound;
 import com.world.worldproxy.model.City;
+import com.world.worldproxy.model.request.ApiKeyRequest;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -40,20 +39,18 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public City getCityData(String name) throws JsonProcessingException, CityNotFound {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Api-Key", apiNinjaApiKey);
-        HttpEntity<String> requestEntity = new HttpEntity<>("parameters", headers);
+        HttpEntity<String> apiKeyRequest = ApiKeyRequest.buildRequest(apiNinjaApiKey);
 
         ResponseEntity<String> response = restTemplate.exchange(apiNinjaCityBaseUrl + "?name=" + name,
                 HttpMethod.GET,
-                requestEntity,
+                apiKeyRequest,
                 String.class);
 
         JSONArray jsonArray = new JSONArray(response.getBody());
-        try {
+        if (jsonArray.length() > 0) {
             City city = objectMapper.readValue(jsonArray.get(0).toString(), City.class);
             return city;
-        } catch (JSONException e) {
+        } else {
             throw new CityNotFound();
         }
     }
