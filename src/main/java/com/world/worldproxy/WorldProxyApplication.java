@@ -19,7 +19,7 @@ public class WorldProxyApplication {
 
 		@GetMapping("")
 		String welcome() {
-			return "Welcome to World proxy Service";
+			return "Welcome to World Proxy service";
 		}
 	}
 
