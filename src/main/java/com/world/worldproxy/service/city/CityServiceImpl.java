@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.error.CityNotFound;
 import com.world.worldproxy.model.City;
 import com.world.worldproxy.model.request.ApiKeyRequest;
+import com.world.worldproxy.model.response.CountryCitiesResponse;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +15,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 
 @Service
@@ -56,10 +55,10 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public List<String> getCities(String country) throws JsonProcessingException {
-        ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + country, String.class);
+    public CountryCitiesResponse getCities(String country) throws JsonProcessingException {
+        ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + "q?country=" + country, String.class);
 
-        List<String> cities = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+        CountryCitiesResponse cities = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
         return cities;
     }
 }
