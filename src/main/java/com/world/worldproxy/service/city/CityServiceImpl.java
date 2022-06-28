@@ -7,6 +7,7 @@ import com.world.worldproxy.error.CityNotFound;
 import com.world.worldproxy.model.City;
 import com.world.worldproxy.model.request.ApiKeyRequest;
 import com.world.worldproxy.model.response.CountryCitiesResponse;
+import com.world.worldproxy.model.response.external.CountryCitiesExternalResponse;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,8 +58,7 @@ public class CityServiceImpl implements CityService {
     @Override
     public CountryCitiesResponse getCities(String country) throws JsonProcessingException {
         ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + "q?country=" + country, String.class);
-
-        CountryCitiesResponse cities = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
-        return cities;
+        CountryCitiesExternalResponse externalResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+        return new CountryCitiesResponse(externalResponse.getData());
     }
 }
