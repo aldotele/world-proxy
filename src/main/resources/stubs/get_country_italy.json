@@ -1,144 +1,10 @@
 [
   {
-    "name": {
-      "common": "Italy",
-      "official": "Italian Republic",
-      "nativeName": {
-        "ita": {
-          "official": "Repubblica italiana",
-          "common": "Italia"
-        }
-      }
-    },
-    "tld": [
-      ".it"
-    ],
-    "cca2": "IT",
-    "ccn3": "380",
-    "cca3": "ITA",
-    "cioc": "ITA",
-    "independent": true,
-    "status": "officially-assigned",
-    "unMember": true,
-    "currencies": {
-      "EUR": {
-        "name": "Euro",
-        "symbol": "€"
-      }
-    },
-    "idd": {
-      "root": "+3",
-      "suffixes": [
-        "9"
-      ]
-    },
     "capital": [
       "Rome"
     ],
-    "altSpellings": [
-      "IT",
-      "Italian Republic",
-      "Repubblica italiana"
-    ],
-    "region": "Europe",
-    "subregion": "Southern Europe",
-    "languages": {
-      "ita": "Italian"
-    },
-    "translations": {
-      "ara": {
-        "official": "الجمهورية الإيطالية",
-        "common": "إيطاليا"
-      },
-      "ces": {
-        "official": "Italská republika",
-        "common": "Itálie"
-      },
-      "cym": {
-        "official": "Italian Republic",
-        "common": "Italy"
-      },
-      "deu": {
-        "official": "Italienische Republik",
-        "common": "Italien"
-      },
-      "est": {
-        "official": "Itaalia Vabariik",
-        "common": "Itaalia"
-      },
-      "fin": {
-        "official": "Italian tasavalta",
-        "common": "Italia"
-      },
-      "fra": {
-        "official": "République italienne",
-        "common": "Italie"
-      },
-      "hrv": {
-        "official": "talijanska Republika",
-        "common": "Italija"
-      },
-      "hun": {
-        "official": "Olasz Köztársaság",
-        "common": "Olaszország"
-      },
-      "ita": {
-        "official": "Repubblica italiana",
-        "common": "Italia"
-      },
-      "jpn": {
-        "official": "イタリア共和国",
-        "common": "イタリア"
-      },
-      "kor": {
-        "official": "이탈리아 공화국",
-        "common": "이탈리아"
-      },
-      "nld": {
-        "official": "Italiaanse Republiek",
-        "common": "Italië"
-      },
-      "per": {
-        "official": "جمهوری ایتالیا",
-        "common": "ایتالیا"
-      },
-      "pol": {
-        "official": "Republika Włoska",
-        "common": "Włochy"
-      },
-      "por": {
-        "official": "República Italiana",
-        "common": "Itália"
-      },
-      "rus": {
-        "official": "итальянская Республика",
-        "common": "Италия"
-      },
-      "slk": {
-        "official": "Talianska republika",
-        "common": "Taliansko"
-      },
-      "spa": {
-        "official": "República Italiana",
-        "common": "Italia"
-      },
-      "swe": {
-        "official": "Republiken Italien",
-        "common": "Italien"
-      },
-      "urd": {
-        "official": "جمہوریہ اطالیہ",
-        "common": "اطالیہ"
-      },
-      "zho": {
-        "official": "意大利共和国",
-        "common": "意大利"
-      }
-    },
-    "latlng": [
-      42.83333333,
-      12.83333333
-    ],
+    "flag": "🇮🇹",
+    "independent": true,
     "landlocked": false,
     "borders": [
       "AUT",
@@ -148,57 +14,191 @@
       "CHE",
       "VAT"
     ],
-    "area": 301336,
-    "demonyms": {
-      "eng": {
-        "f": "Italian",
-        "m": "Italian"
-      },
-      "fra": {
-        "f": "Italienne",
-        "m": "Italien"
-      }
+    "postalCode": {
+      "regex": "^(\\d{5})$",
+      "format": "#####"
     },
-    "flag": "🇮🇹",
-    "maps": {
-      "googleMaps": "https://goo.gl/maps/8M1K27TDj7StTRTq8",
-      "openStreetMaps": "https://www.openstreetmap.org/relation/365331"
-    },
-    "population": 59554023,
-    "gini": {
-      "2017": 35.9
-    },
-    "fifa": "ITA",
-    "car": {
-      "signs": [
-        "I"
-      ],
-      "side": "right"
-    },
-    "timezones": [
-      "UTC+01:00"
-    ],
-    "continents": [
-      "Europe"
-    ],
     "flags": {
-      "png": "https://flagcdn.com/w320/it.png",
-      "svg": "https://flagcdn.com/it.svg"
+      "svg": "https://flagcdn.com/it.svg",
+      "png": "https://flagcdn.com/w320/it.png"
     },
-    "coatOfArms": {
-      "png": "https://mainfacts.com/media/images/coats_of_arms/it.png",
-      "svg": "https://mainfacts.com/media/images/coats_of_arms/it.svg"
-    },
-    "startOfWeek": "monday",
     "capitalInfo": {
       "latlng": [
         41.9,
         12.48
       ]
     },
-    "postalCode": {
-      "format": "#####",
-      "regex": "^(\\d{5})$"
+    "ccn3": "380",
+    "coatOfArms": {
+      "svg": "https://mainfacts.com/media/images/coats_of_arms/it.svg",
+      "png": "https://mainfacts.com/media/images/coats_of_arms/it.png"
+    },
+    "demonyms": {
+      "fra": {
+        "f": "Italienne",
+        "m": "Italien"
+      },
+      "eng": {
+        "f": "Italian",
+        "m": "Italian"
+      }
+    },
+    "fifa": "ITA",
+    "cioc": "ITA",
+    "car": {
+      "side": "right",
+      "signs": [
+        "I"
+      ]
+    },
+    "translations": {
+      "hun": {
+        "common": "Olaszország",
+        "official": "Olasz Köztársaság"
+      },
+      "swe": {
+        "common": "Italien",
+        "official": "Republiken Italien"
+      },
+      "zho": {
+        "common": "意大利",
+        "official": "意大利共和国"
+      },
+      "spa": {
+        "common": "Italia",
+        "official": "República Italiana"
+      },
+      "urd": {
+        "common": "اطالیہ",
+        "official": "جمہوریہ اطالیہ"
+      },
+      "est": {
+        "common": "Itaalia",
+        "official": "Itaalia Vabariik"
+      },
+      "nld": {
+        "common": "Italië",
+        "official": "Italiaanse Republiek"
+      },
+      "jpn": {
+        "common": "イタリア",
+        "official": "イタリア共和国"
+      },
+      "fin": {
+        "common": "Italia",
+        "official": "Italian tasavalta"
+      },
+      "pol": {
+        "common": "Włochy",
+        "official": "Republika Włoska"
+      },
+      "hrv": {
+        "common": "Italija",
+        "official": "talijanska Republika"
+      },
+      "kor": {
+        "common": "이탈리아",
+        "official": "이탈리아 공화국"
+      },
+      "ces": {
+        "common": "Itálie",
+        "official": "Italská republika"
+      },
+      "ara": {
+        "common": "إيطاليا",
+        "official": "الجمهورية الإيطالية"
+      },
+      "rus": {
+        "common": "Италия",
+        "official": "итальянская Республика"
+      },
+      "por": {
+        "common": "Itália",
+        "official": "República Italiana"
+      },
+      "slk": {
+        "common": "Taliansko",
+        "official": "Talianska republika"
+      },
+      "fra": {
+        "common": "Italie",
+        "official": "République italienne"
+      },
+      "deu": {
+        "common": "Italien",
+        "official": "Italienische Republik"
+      },
+      "cym": {
+        "common": "Italy",
+        "official": "Italian Republic"
+      },
+      "ita": {
+        "common": "Italia",
+        "official": "Repubblica italiana"
+      },
+      "per": {
+        "common": "ایتالیا",
+        "official": "جمهوری ایتالیا"
+      }
+    },
+    "altSpellings": [
+      "IT",
+      "Italian Republic",
+      "Repubblica italiana"
+    ],
+    "area": 301336,
+    "languages": {
+      "ita": "Italian"
+    },
+    "maps": {
+      "openStreetMaps": "https://www.openstreetmap.org/relation/365331",
+      "googleMaps": "https://goo.gl/maps/8M1K27TDj7StTRTq8"
+    },
+    "subregion": "Southern Europe",
+    "idd": {
+      "suffixes": [
+        "9"
+      ],
+      "root": "+3"
+    },
+    "tld": [
+      ".it"
+    ],
+    "unMember": true,
+    "gini": {
+      "2017": 35.9
+    },
+    "continents": [
+      "Europe"
+    ],
+    "population": 59554023,
+    "startOfWeek": "monday",
+    "timezones": [
+      "UTC+01:00"
+    ],
+    "name": {
+      "nativeName": {
+        "ita": {
+          "common": "Italia",
+          "official": "Repubblica italiana"
+        }
+      },
+      "common": "Italy",
+      "official": "Italian Republic"
+    },
+    "cca3": "ITA",
+    "region": "Europe",
+    "latlng": [
+      42.83333333,
+      12.83333333
+    ],
+    "cca2": "IT",
+    "status": "officially-assigned",
+    "currencies": {
+      "EUR": {
+        "symbol": "\u20ac",
+        "name": "Euro"
+      }
     }
   }
 ]
