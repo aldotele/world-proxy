@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -57,9 +58,12 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public List<String> getCities(String country) throws JsonProcessingException {
+    public List<String> getCities(String country, String startWith) throws JsonProcessingException {
         ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + "q?country=" + country, String.class);
         CountryCitiesExternalResponse externalResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
-        return externalResponse.getData();
+        List<String> allCountryCities = externalResponse.getData();
+        return startWith != null ? allCountryCities.stream()
+                .filter(city -> city.toLowerCase().startsWith(startWith.toLowerCase()))
+                .collect(Collectors.toList()) : allCountryCities;
     }
 }

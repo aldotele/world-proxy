@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface CityService {
     City getCityData(String name) throws JsonProcessingException, CityNotFound;
-    List<String> getCities(String country) throws JsonProcessingException;
+    List<String> getCities(String country, String startWith) throws JsonProcessingException;
 }
