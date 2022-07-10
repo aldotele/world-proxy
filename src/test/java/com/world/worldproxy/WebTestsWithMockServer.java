@@ -234,6 +234,7 @@ class WebTestsWithMockServer {
 
 		mockMvc.perform(get("/country/currency/italy"))
 				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.currencies").isArray())
 				.andExpect(jsonPath("$.currencies.[0]").value("Euro (€)"));
 
 		mockServer.verify();
