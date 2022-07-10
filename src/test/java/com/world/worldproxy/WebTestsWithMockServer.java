@@ -220,6 +220,26 @@ class WebTestsWithMockServer {
 	}
 
 	@Test
+	public void getCurrencies() throws Exception {
+		// stubbing the country object of the external service
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+
+		// stubbing the external request to third party API
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/italy")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalCountryResponse)
+				);
+
+		mockMvc.perform(get("/country/currency/italy"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.currencies.[0]").value("Euro (€)"));
+
+		mockServer.verify();
+	}
+
+	@Test
 	public void getFlag() throws Exception {
 		// stubbing the country object of the external service
 		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
