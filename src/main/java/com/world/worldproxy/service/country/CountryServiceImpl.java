@@ -52,7 +52,7 @@ public class CountryServiceImpl implements CountryService {
         ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + country, String.class);
         JSONArray jsonArr = new JSONArray(response.getBody());
         JSONObject jsonObj = (JSONObject) jsonArr.get(0);
-        return (String) jsonObj.getJSONObject("maps").toMap().get("googleMaps");
+        return (String) jsonObj.getJSONObject("maps").get("googleMaps");
     }
 
     @Override
