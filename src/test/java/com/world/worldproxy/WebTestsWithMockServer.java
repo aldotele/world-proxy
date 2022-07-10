@@ -3,6 +3,7 @@ package com.world.worldproxy;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.service.country.CountryService;
+import org.json.JSONArray;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -258,6 +259,53 @@ class WebTestsWithMockServer {
 				.andExpect(jsonPath("$.flag").value("https://flagcdn.com/it.svg"));
 
 		mockServer.verify();
+	}
+
+	@Test
+	public void getCountriesByPopulationRange() throws Exception {
+		// stubbing the all countries object of the external service
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+
+		mockServer.expect(ExpectedCount.times(4), requestTo(new URI(restCountriesBaseUrl + "/all")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalAllCountriesResponse));
+
+		MvcResult result1 = mockMvc.perform(get("/country/population")
+						.queryParam("min", "10000000")
+						.queryParam("max", "60000000"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		MvcResult result2 = mockMvc.perform(get("/country/population")
+						.queryParam("min", "20000000")
+						.queryParam("max", "50000000"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		MvcResult result3 = mockMvc.perform(get("/country/population")
+						.queryParam("min", "1000000000"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		MvcResult result4 = mockMvc.perform(get("/country/population")
+						.queryParam("max", "1000000"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		mockServer.verify();
+
+		JSONArray resultsBetween10Mand60M = new JSONArray(result1.getResponse().getContentAsString());
+		JSONArray resultsBetween20Mand50M = new JSONArray(result2.getResponse().getContentAsString());
+		JSONArray resultsWithMin1B = new JSONArray(result3.getResponse().getContentAsString());
+		JSONArray resultsWithMax1M = new JSONArray(result4.getResponse().getContentAsString());
+
+		// restricting the population range must result in fewer countries filtered
+		Assertions.assertTrue(resultsBetween10Mand60M.length() > resultsBetween20Mand50M.length());
+
+		Assertions.assertTrue(resultsWithMin1B.length() > 0);
+		Assertions.assertTrue(resultsWithMax1M.length() > 0);
 	}
 
 }
