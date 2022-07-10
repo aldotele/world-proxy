@@ -5,17 +5,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.model.Country;
 import com.world.worldproxy.service.country.CountryService;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -23,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest
 @ComponentScan("com.world.worldproxy.config")
-public class ControllerTests {
+public class WebTestsWithMockBean {
     @Autowired
     private MockMvc mockMvc;
 
@@ -33,11 +38,17 @@ public class ControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    public void getCountry() throws Exception {
+    private Country expectedCountryResponse;
+
+    @BeforeEach
+    void setUp() throws IOException, JSONException {
         String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
         JSONArray stubbedExternalCountryObject = new JSONArray(stubbedExternalCountryResponse);
-        Country expectedCountryResponse = objectMapper.readValue(stubbedExternalCountryObject.get(0).toString(), Country.class);
+        expectedCountryResponse = objectMapper.readValue(stubbedExternalCountryObject.get(0).toString(), Country.class);
+    }
+
+    @Test
+    public void getCountry() throws Exception {
 
         // stubbing the external country response of third party API
         when(countryService.getCountry("italy")).thenReturn(expectedCountryResponse);
@@ -60,5 +71,9 @@ public class ControllerTests {
                 .andExpect(jsonPath("$.languages.length()").value(1))
                 .andExpect(jsonPath("$.languages[0]").value("Italian"))
                 .andExpect(jsonPath("$.translations").isArray());
+
+        Mockito.verify(countryService, times(1)).getCountry("italy");
     }
+
+
 }
