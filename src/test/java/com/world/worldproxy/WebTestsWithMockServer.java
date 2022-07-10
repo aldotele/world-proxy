@@ -377,4 +377,26 @@ class WebTestsWithMockServer {
 		Assertions.assertEquals(0, neighbours.length());
 	}
 
+	@Test
+	public void getLanguages() throws Exception {
+		String malta = "get_country_malta.json";
+		// stubbing the country object of the external service
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", malta), StandardCharsets.ISO_8859_1);
+
+		// stubbing the external request to third party API
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/malta")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalCountryResponse)
+				);
+
+		mockMvc.perform(get("/country/language/malta"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.languages").isArray())
+				.andExpect(jsonPath("$.languages", hasItems("Maltese", "English")));
+
+		mockServer.verify();
+	}
+
 }
