@@ -308,4 +308,73 @@ class WebTestsWithMockServer {
 		Assertions.assertTrue(resultsWithMax1M.length() > 0);
 	}
 
+	@Test
+	public void getNeighbours() throws Exception {
+		String italy = "get_country_italy.json";
+		// stubbing the country object of the external service
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", italy), StandardCharsets.ISO_8859_1);
+
+		// stubbing the external request to third party API
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/italy")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalCountryResponse)
+				);
+
+		// stubbing the all countries object of the external service
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalAllCountriesResponse));
+
+		MvcResult result = mockMvc.perform(get("/country/neighbours/italy"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		mockServer.verify();
+
+		JSONArray neighbours = new JSONArray(result.getResponse().getContentAsString());
+
+		Assertions.assertEquals(6, neighbours.length());
+	}
+
+	@Test
+	public void getZeroNeighbours() throws Exception {
+		String malta = "get_country_malta.json";
+		// stubbing the country object of the external service
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", malta), StandardCharsets.ISO_8859_1);
+
+		// stubbing the external request to third party API
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/italy")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalCountryResponse)
+				);
+
+		// stubbing the all countries object of the external service
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalAllCountriesResponse));
+
+		MvcResult result = mockMvc.perform(get("/country/neighbours/italy"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		mockServer.verify();
+
+		JSONArray neighbours = new JSONArray(result.getResponse().getContentAsString());
+
+
+		Assertions.assertEquals(0, neighbours.length());
+	}
+
 }
