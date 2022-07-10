@@ -1,7 +1,9 @@
 package com.world.worldproxy;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.service.country.CountryService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -21,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.isA;
@@ -97,7 +101,7 @@ class WebTestsWithMockServer {
 
 	@Test
 	public void getAllCountries() throws Exception {
-		// stubbing the country object of the external service
+		// stubbing the all countries object of the external service
 		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
@@ -143,6 +147,56 @@ class WebTestsWithMockServer {
 				.andExpect(jsonPath("$.maps").value("https://goo.gl/maps/8M1K27TDj7StTRTq8"));
 
 		mockServer.verify();
+	}
+
+	@Test
+	public void getAllCapitals() throws Exception {
+		// stubbing the all countries object of the external service
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalAllCountriesResponse));
+
+		MvcResult result = mockMvc.perform(get("/country/capital/all"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		mockServer.verify();
+
+		List<String> capitals = objectMapper.readValue(result.getResponse().getContentAsString(),
+				new TypeReference<List<String>>() {});
+
+		Assertions.assertTrue(capitals.containsAll(List.of("Rome", "Ottawa", "Tokyo", "Canberra", "Nairobi")));
+		Assertions.assertTrue(capitals.size() > 200);
+	}
+
+	@Test
+	public void getAllCapitalsByContinent() throws Exception {
+		// stubbing the all countries object of the external service
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalAllCountriesResponse));
+
+		MvcResult result = mockMvc.perform(get("/country/capital/all")
+						.queryParam("continent", "oceania"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		mockServer.verify();
+
+		List<String> capitals = objectMapper.readValue(result.getResponse().getContentAsString(),
+				new TypeReference<List<String>>() {});
+
+		Assertions.assertTrue(capitals.containsAll(List.of("Canberra", "Wellington")));
+		Assertions.assertFalse(capitals.contains("Rome"));
+		Assertions.assertEquals(27, capitals.size());
 	}
 
 	@Test
