@@ -399,4 +399,25 @@ class WebTestsWithMockServer {
 		mockServer.verify();
 	}
 
+	@Test
+	public void getTranslations() throws Exception {
+		// stubbing the country object of the external service
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+
+		// stubbing the external request to third party API
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/italy")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalCountryResponse)
+				);
+
+		mockMvc.perform(get("/country/translation/italy"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.translations").isArray())
+				.andExpect(jsonPath("$.translations", hasItems("Italia", "Italy", "Italie", "Italien", "Taliansko")));
+
+		mockServer.verify();
+	}
+
 }
