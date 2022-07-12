@@ -29,7 +29,7 @@ public class CityController {
 
     @Operation(description = "Retrieve single city information")
     @GetMapping("/{name}")
-    City getCityData(@PathVariable String name) throws JsonProcessingException, CityNotFound {
-        return cityService.getCityData(name);
+    City getCityDetails(@PathVariable String name) throws JsonProcessingException, CityNotFound {
+        return cityService.getCityDetails(name);
     }
 }

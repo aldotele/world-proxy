@@ -38,9 +38,18 @@ public class CityServiceImpl implements CityService {
     @Value("${countrycity.base.url}")
     String countryCityBaseUrl;
 
+    @Override
+    public List<String> getCities(String country, String startWith) throws JsonProcessingException {
+        ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + "q?country=" + country, String.class);
+        CountryCitiesExternalResponse externalResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+        List<String> allCountryCities = externalResponse.getData();
+        return startWith != null ? allCountryCities.stream()
+                .filter(city -> city.toLowerCase().startsWith(startWith.toLowerCase()))
+                .collect(Collectors.toList()) : allCountryCities;
+    }
 
     @Override
-    public City getCityData(String name) throws JsonProcessingException, CityNotFound {
+    public City getCityDetails(String name) throws JsonProcessingException, CityNotFound {
         HttpEntity<String> apiKeyRequest = ApiKeyRequest.buildRequest(apiNinjaApiKey);
 
         ResponseEntity<String> response = restTemplate.exchange(apiNinjaCityBaseUrl + "?name=" + name,
@@ -55,15 +64,5 @@ public class CityServiceImpl implements CityService {
         } else {
             throw new CityNotFound();
         }
-    }
-
-    @Override
-    public List<String> getCities(String country, String startWith) throws JsonProcessingException {
-        ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + "q?country=" + country, String.class);
-        CountryCitiesExternalResponse externalResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
-        List<String> allCountryCities = externalResponse.getData();
-        return startWith != null ? allCountryCities.stream()
-                .filter(city -> city.toLowerCase().startsWith(startWith.toLowerCase()))
-                .collect(Collectors.toList()) : allCountryCities;
     }
 }

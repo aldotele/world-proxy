@@ -7,6 +7,6 @@ import com.world.worldproxy.model.City;
 import java.util.List;
 
 public interface CityService {
-    City getCityData(String name) throws JsonProcessingException, CityNotFound;
+    City getCityDetails(String name) throws JsonProcessingException, CityNotFound;
     List<String> getCities(String country, String startWith) throws JsonProcessingException;
 }
