@@ -420,4 +420,46 @@ class WebTestsWithMockServer {
 		mockServer.verify();
 	}
 
+	@Test
+	public void getCountriesByLanguage() throws Exception {
+		// stubbing the all countries object of the external service
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+
+		mockServer.expect(ExpectedCount.twice(), requestTo(new URI(restCountriesBaseUrl + "/all")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalAllCountriesResponse));
+
+		// expecting several countries to speak spanish
+		mockMvc.perform(get("/country/speak/italian"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.[*].name", hasItems("Italy", "Vatican City", "San Marino", "Switzerland")));
+
+		// expecting only Finland to speak finnish
+		mockMvc.perform(get("/country/speak/finnish"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.[*].name", hasItems("Finland")));
+
+		mockServer.verify();
+	}
+
+	@Test
+	public void getCountriesByContinent() throws Exception {
+		// stubbing the all countries object of the external service
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalAllCountriesResponse));
+
+		mockMvc.perform(get("/country/in/europe"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.[*].name", hasItems("Italy", "Germany", "Spain", "Ukraine")));
+
+		mockServer.verify();
+	}
+
 }

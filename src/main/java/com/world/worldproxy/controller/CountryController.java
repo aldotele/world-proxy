@@ -83,7 +83,7 @@ public class CountryController {
 
     @Operation(description = "Get countries by continent")
     @GetMapping("/in/{continent}")
-    List<Country> getCountriesByPopulationRange(@PathVariable String continent) throws JsonProcessingException {
+    List<Country> getCountriesByContinent(@PathVariable String continent) throws JsonProcessingException {
         return countryService.getCountriesByContinent(continent);
     }
 
