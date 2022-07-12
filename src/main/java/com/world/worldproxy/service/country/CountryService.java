@@ -21,4 +21,5 @@ public interface CountryService {
     <T> List<T> getCountriesByContinent(String continent) throws JsonProcessingException;
     List<String> getLanguageByCountry(String country) throws JsonProcessingException;
     List<String> getTranslationsByCountry(String country) throws JsonProcessingException;
+    <T> List<T> getCountriesMultilingual() throws JsonProcessingException;
 }

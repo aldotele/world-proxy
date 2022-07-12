@@ -159,4 +159,13 @@ public class CountryServiceShallowImpl implements CountryService {
     public List<String> getTranslationsByCountry(String country) throws JsonProcessingException {
         return getCountry(country).getTranslations();
     }
+
+    @Override
+    public List<String> getCountriesMultilingual() throws JsonProcessingException {
+        return getAllCountries().stream()
+                .filter(country -> country.getLanguages() != null)
+                .filter(country -> country.getLanguages().size() > 1)
+                .map(Country::getName)
+                .collect(Collectors.toList());
+    }
 }

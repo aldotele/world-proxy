@@ -110,4 +110,10 @@ public class CountryController {
     List<Country> getCountriesByLanguage(@PathVariable String language) throws JsonProcessingException {
         return countryService.getCountriesByLanguage(language);
     }
+
+    @Operation(description = "Get countries that speak more than one language")
+    @GetMapping("/multilingual")
+    List<Country> getCountriesMultilingual() throws JsonProcessingException {
+        return countryService.getCountriesMultilingual();
+    }
 }
