@@ -272,25 +272,25 @@ class WebTestsWithMockServer {
 						.contentType(MediaType.APPLICATION_JSON)
 						.body(stubbedExternalAllCountriesResponse));
 
-		MvcResult result1 = mockMvc.perform(get("/country/population")
-						.queryParam("min", "10000000")
-						.queryParam("max", "60000000"))
+		MvcResult result1 = mockMvc.perform(get("/country")
+						.queryParam("minPopulation", "10000000")
+						.queryParam("maxPopulation", "60000000"))
 				.andExpect(status().isOk())
 				.andReturn();
 
-		MvcResult result2 = mockMvc.perform(get("/country/population")
-						.queryParam("min", "20000000")
-						.queryParam("max", "50000000"))
+		MvcResult result2 = mockMvc.perform(get("/country")
+						.queryParam("minPopulation","20000000")
+						.queryParam("maxPopulation", "50000000"))
 				.andExpect(status().isOk())
 				.andReturn();
 
-		MvcResult result3 = mockMvc.perform(get("/country/population")
-						.queryParam("min", "1000000000"))
+		MvcResult result3 = mockMvc.perform(get("/country")
+						.queryParam("minPopulation","1000000000"))
 				.andExpect(status().isOk())
 				.andReturn();
 
-		MvcResult result4 = mockMvc.perform(get("/country/population")
-						.queryParam("max", "1000000"))
+		MvcResult result4 = mockMvc.perform(get("/country")
+						.queryParam("maxPopulation", "1000000"))
 				.andExpect(status().isOk())
 				.andReturn();
 

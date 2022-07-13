@@ -75,10 +75,10 @@ public class CountryController {
     }
 
     @Operation(description = "Get countries by population range")
-    @GetMapping("/population")
-    List<Country> getCountriesByPopulationRange(@RequestParam(required = false) BigDecimal min,
-                                           @RequestParam(required = false) BigDecimal max) throws JsonProcessingException, QueryParameterException {
-        return countryService.getCountriesByPopulationRange(min, max);
+    @GetMapping("")
+    List<Country> getCountriesByPopulationRange(@RequestParam(required = false) BigDecimal minPopulation,
+                                           @RequestParam(required = false) BigDecimal maxPopulation) throws JsonProcessingException, QueryParameterException {
+        return countryService.getCountriesByPopulationRange(minPopulation, maxPopulation);
     }
 
     @Operation(description = "Get countries by continent")

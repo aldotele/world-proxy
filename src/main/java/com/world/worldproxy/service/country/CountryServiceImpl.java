@@ -117,7 +117,7 @@ public class CountryServiceImpl implements CountryService {
                     .collect(Collectors.toList());
         }
         else {
-            throw new QueryParameterException("at least one parameter between min and max population is required.");
+            throw new QueryParameterException("at least one parameter between minPopulation and maxPopulation is required.");
         }
     }
 
