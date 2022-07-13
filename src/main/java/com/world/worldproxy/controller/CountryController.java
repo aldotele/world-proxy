@@ -77,7 +77,7 @@ public class CountryController {
     @Operation(description = "Get countries by population range")
     @GetMapping("")
     List<Country> getCountriesByPopulationRange(@RequestParam(required = false) BigDecimal minPopulation,
-                                           @RequestParam(required = false) BigDecimal maxPopulation) throws JsonProcessingException, QueryParameterException {
+                                                @RequestParam(required = false) BigDecimal maxPopulation) throws JsonProcessingException, QueryParameterException {
         return countryService.getCountriesByPopulationRange(minPopulation, maxPopulation);
     }
 
@@ -112,7 +112,7 @@ public class CountryController {
     }
 
     @Operation(description = "Get countries that speak more than one language")
-    @GetMapping("/multilingual")
+    @GetMapping("/multilingual/all")
     List<Country> getCountriesMultilingual() throws JsonProcessingException {
         return countryService.getCountriesMultilingual();
     }
