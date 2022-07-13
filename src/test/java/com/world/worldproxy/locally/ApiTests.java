@@ -1,4 +1,4 @@
-package com.world.worldproxy.local;
+package com.world.worldproxy.locally;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

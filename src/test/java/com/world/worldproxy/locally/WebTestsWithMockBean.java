@@ -1,4 +1,4 @@
-package com.world.worldproxy.local;
+package com.world.worldproxy.locally;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
