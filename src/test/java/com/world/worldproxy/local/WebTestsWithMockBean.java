@@ -1,11 +1,13 @@
-package com.world.worldproxy;
+package com.world.worldproxy.local;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.model.Country;
 import com.world.worldproxy.service.country.CountryService;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,11 +16,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -75,5 +79,28 @@ public class WebTestsWithMockBean {
         Mockito.verify(countryService, times(1)).getCountry("italy");
     }
 
+    @Test
+    public void getAllCountries() throws Exception {
+        String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+        JSONArray stubbedExternalCountryObject = new JSONArray(stubbedExternalAllCountriesResponse);
+        List<Country> expectedAllCountriesResponse = objectMapper.readValue(stubbedExternalCountryObject.toString(), new TypeReference<>() {});
 
+        // stubbing the external country response of third party API
+        when(countryService.getAllCountries()).thenReturn(expectedAllCountriesResponse);
+
+        MvcResult result = this.mockMvc
+                .perform(get("/country/all"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Mockito.verify(countryService, times(1)).getAllCountries();
+
+//        List<Country> actualAllCountriesResponse = Arrays.asList(objectMapper.readValue(result.getResponse().toString(), Country[].class));
+
+//        List<Country> actualAllCountriesResponse = Arrays.asList(objectMapper.readValue(result.getResponse().getContentAsString(),
+//                new TypeReference<>() {}));
+
+        Assertions.assertTrue(result.getResponse().getContentAsString().contains("Italy"));
+
+    }
 }
