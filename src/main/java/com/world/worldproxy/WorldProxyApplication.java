@@ -39,19 +39,21 @@ public class WorldProxyApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		// saving on database all translations for each country
-		// this is done to support multilingual country queries
-		// e.g. queries such as "deutschland" and "germania" will be standardized to "germany" after looking on db
-		ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/all", String.class);
-		List<Country> allCountries = Arrays.asList(objectMapper.readValue(response.getBody(), Country[].class));
+		if (countryTranslationRepository.findAll().size() == 0) {
+			// saving on database all translations for each country
+			// this is done to support multilingual country queries
+			// e.g. queries such as "deutschland" and "germania" will be standardized to "germany" after looking on db
+			ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/all", String.class);
+			List<Country> allCountries = Arrays.asList(objectMapper.readValue(response.getBody(), Country[].class));
 
-		// for each country, each translation will be extracted and saved in a row
-		// example of a database row will be translation=italia, country=italy
-		allCountries.forEach(country -> country.getTranslations().stream().distinct()
-				.forEach(translation -> countryTranslationRepository.save(
-						new CountryTranslation(translation, country.getName())
-				))
-		);
+			// for each country, each translation will be extracted and saved in a row
+			// example of a database row will be translation=italia, country=italy
+			allCountries.forEach(country -> country.getTranslations().stream().distinct()
+					.forEach(translation -> countryTranslationRepository.save(
+							new CountryTranslation(translation, country.getName())
+					))
+			);
+		}
 	}
 
 	@RestController

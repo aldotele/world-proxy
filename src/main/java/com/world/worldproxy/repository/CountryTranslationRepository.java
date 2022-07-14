@@ -11,4 +11,6 @@ public interface CountryTranslationRepository extends JpaRepository<CountryTrans
 
     @Override
     List<CountryTranslation> findAll();
+
+    List<CountryTranslation> findByTranslation(String translation);
 }
