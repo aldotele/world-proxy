@@ -2,14 +2,18 @@ package com.world.worldproxy;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.world.worldproxy.entity.CountryTranslation;
+import com.world.worldproxy.repository.CountryTranslationRepository;
 import com.world.worldproxy.service.country.CountryService;
 import org.json.JSONArray;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -54,6 +58,9 @@ class WebTestsWithMockServer {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@MockBean
+	CountryTranslationRepository countryTranslationRepository;
+
 	private MockRestServiceServer mockServer;
 
 	@Value("${restcountries.base.url}")
@@ -69,6 +76,9 @@ class WebTestsWithMockServer {
 	public void getCountry() throws Exception {
 		// stubbing the country object of the external service
 		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+
+		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
+						.thenReturn(List.of(new CountryTranslation("italy", "italy")));
 
 		// stubbing the external request to third party API
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/italy")))
@@ -134,6 +144,9 @@ class WebTestsWithMockServer {
 	public void getMaps() throws Exception {
 		// stubbing the country object of the external service
 		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+
+		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
+				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
 
 		// stubbing the external request to third party API
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/italy")))
@@ -205,6 +218,9 @@ class WebTestsWithMockServer {
 		// stubbing the country object of the external service
 		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
 
+		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
+				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
+
 		// stubbing the external request to third party API
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/italy")))
 				.andExpect(method(HttpMethod.GET))
@@ -224,6 +240,9 @@ class WebTestsWithMockServer {
 	public void getCurrencies() throws Exception {
 		// stubbing the country object of the external service
 		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+
+		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
+				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
 
 		// stubbing the external request to third party API
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/italy")))
@@ -245,6 +264,9 @@ class WebTestsWithMockServer {
 	public void getFlag() throws Exception {
 		// stubbing the country object of the external service
 		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+
+		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
+				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
 
 		// stubbing the external request to third party API
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/italy")))
@@ -314,6 +336,9 @@ class WebTestsWithMockServer {
 		// stubbing the country object of the external service
 		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", italy), StandardCharsets.ISO_8859_1);
 
+		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
+				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
+
 		// stubbing the external request to third party API
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/italy")))
 				.andExpect(method(HttpMethod.GET))
@@ -347,6 +372,9 @@ class WebTestsWithMockServer {
 		String malta = "get_country_malta.json";
 		// stubbing the country object of the external service
 		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", malta), StandardCharsets.ISO_8859_1);
+
+		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
+				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
 
 		// stubbing the external request to third party API
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/italy")))
@@ -383,6 +411,9 @@ class WebTestsWithMockServer {
 		// stubbing the country object of the external service
 		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", malta), StandardCharsets.ISO_8859_1);
 
+		Mockito.when(countryTranslationRepository.findByTranslation("malta"))
+				.thenReturn(List.of(new CountryTranslation("malta", "malta")));
+
 		// stubbing the external request to third party API
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/malta")))
 				.andExpect(method(HttpMethod.GET))
@@ -403,6 +434,9 @@ class WebTestsWithMockServer {
 	public void getTranslations() throws Exception {
 		// stubbing the country object of the external service
 		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+
+		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
+				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
 
 		// stubbing the external request to third party API
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/name/italy")))
