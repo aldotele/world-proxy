@@ -39,7 +39,8 @@ public class WorldProxyApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		if (countryTranslationRepository.findAll().size() == 0) {
+		List<CountryTranslation> saved = countryTranslationRepository.findAll();
+		if (saved.size() == 0) {
 			// saving on database all translations for each country
 			// this is done to support multilingual country queries
 			// e.g. queries such as "deutschland" and "germania" will be standardized to "germany" after looking on db

@@ -2,6 +2,7 @@ package com.world.worldproxy.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.world.worldproxy.service.multilingual.LanguageNormalizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -37,5 +38,10 @@ public class WorldProxyConfiguration {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper;
+    }
+
+    @Bean
+    public LanguageNormalizer languageConverter() {
+        return new LanguageNormalizer();
     }
 }
