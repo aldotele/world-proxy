@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.exception.QueryParameterException;
 import com.world.worldproxy.model.Country;
+import com.world.worldproxy.repository.CountryTranslationRepository;
+import com.world.worldproxy.service.multilingual.LanguageNormalizer;
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,6 +31,12 @@ public class CountryServiceImpl implements CountryService {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    CountryTranslationRepository countryTranslationRepository;
+
+    @Autowired
+    LanguageNormalizer languageNormalizer;
+
     @Value("${restcountries.base.url}")
     String restCountriesBaseUrl;
 
@@ -41,7 +49,8 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public Country getCountry(String name) throws JsonProcessingException {
-        ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + name, String.class);
+        String englishName = languageNormalizer.normalizeToEnglish(name);
+        ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + englishName, String.class);
         JSONArray jsonArray = new JSONArray(response.getBody());
         Country country = objectMapper.readValue(jsonArray.get(0).toString(), Country.class);
         return country;

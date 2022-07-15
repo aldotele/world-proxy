@@ -116,4 +116,5 @@ public class CountryController {
     List<Country> getCountriesMultilingual() throws JsonProcessingException {
         return countryService.getCountriesMultilingual();
     }
+
 }
