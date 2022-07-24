@@ -3,6 +3,7 @@ package com.world.worldproxy;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.entity.CountryTranslation;
+import com.world.worldproxy.model.City;
 import com.world.worldproxy.repository.CountryTranslationRepository;
 import com.world.worldproxy.service.country.CountryService;
 import org.json.JSONArray;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -67,6 +69,9 @@ class WebTestsWithMockServer {
 
 	@Value("${countrycity.base.url}")
 	String countryCityBaseUrl;
+
+	@Value("${api.ninjas.city.base.url}")
+	String apiNinjaCityBaseUrl;
 
 	@BeforeEach
 	public void createServer() throws Exception {
@@ -548,6 +553,36 @@ class WebTestsWithMockServer {
 				.andExpect(jsonPath("$.*", containsInAnyOrder("Zola Predosa", "Zoldo Alto", "Zollino", "Zolla")));
 
 		mockServer.verify();
+	}
+
+	@Test
+	public void getCityDetails() throws Exception {
+		// stubbing the city details object of the external service
+		String stubbedExternalCityDetailsResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_city_details_rome.json"), StandardCharsets.ISO_8859_1);
+
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(apiNinjaCityBaseUrl + "?name=rome")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalCityDetailsResponse));
+
+		MvcResult result = mockMvc.perform(get("/city/rome"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		City expectedCity = new City();
+		expectedCity.setCapital(true);
+		expectedCity.setName("Rome");
+		expectedCity.setCountry("IT");
+		expectedCity.setLongitude(new BigDecimal("12.4828"));
+		expectedCity.setLatitude(new BigDecimal("41.8931"));
+		expectedCity.setPopulation(new BigDecimal("2872800"));
+
+		City actualCity = objectMapper.readValue(result.getResponse().getContentAsString(), City.class);
+
+		mockServer.verify();
+
+		Assertions.assertEquals(expectedCity, actualCity);
 	}
 
 }

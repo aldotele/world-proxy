@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Rome",
+    "latitude": 41.8931,
+    "longitude": 12.4828,
+    "country": "IT",
+    "population": 2872800,
+    "is_capital": true
+  }
+]

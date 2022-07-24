@@ -1,11 +1,15 @@
 package com.world.worldproxy.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 
+@Accessors(chain = true)
+@Data
 public class City implements Serializable {
     @JsonProperty("name")
     private String name;
