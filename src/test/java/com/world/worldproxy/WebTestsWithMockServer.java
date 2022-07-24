@@ -31,8 +31,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
@@ -65,6 +64,9 @@ class WebTestsWithMockServer {
 
 	@Value("${restcountries.base.url}")
 	String restCountriesBaseUrl;
+
+	@Value("${countrycity.base.url}")
+	String countryCityBaseUrl;
 
 	@BeforeEach
 	public void createServer() throws Exception {
@@ -492,6 +494,58 @@ class WebTestsWithMockServer {
 		mockMvc.perform(get("/country/in/europe"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.[*].name", hasItems("Italy", "Germany", "Spain", "Ukraine")));
+
+		mockServer.verify();
+	}
+
+	@Test
+	public void getAllCitiesByCountry() throws Exception {
+		// stubbing the all cities object of the external service
+		String stubbedExternalCitiesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_cities_italy.json"), StandardCharsets.ISO_8859_1);
+
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(countryCityBaseUrl + "/q?country=italy")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalCitiesResponse));
+
+		MvcResult result = mockMvc.perform(get("/city/in/italy"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		mockServer.verify();
+
+		List<String> cities = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<String>>() {
+		});
+
+		// some major cities
+		Assertions.assertTrue(cities.containsAll(List.of("Milan", "Rome", "Turin", "Naples", "Bologna", "Florence")));
+		// some minor cities
+		Assertions.assertTrue(cities.containsAll(List.of("Alessandria", "Biella", "Caltanissetta", "Potenza", "Terni")));
+		// some small towns
+		Assertions.assertTrue(cities.containsAll(List.of("Santa Maria a Vico", "Grandate", "Monopoli", "Frascati")));
+	}
+
+	@Test
+	public void getAllCitiesByCountryWithPrefix() throws Exception {
+		// stubbing the all cities object of the external service
+		String stubbedExternalCitiesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_cities_italy.json"), StandardCharsets.ISO_8859_1);
+
+		mockServer.expect(ExpectedCount.twice(), requestTo(new URI(countryCityBaseUrl + "/q?country=italy")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalCitiesResponse));
+
+		// using prefix pale
+		mockMvc.perform(get("/city/in/italy?startWith=pale"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.*", containsInAnyOrder("Palermo", "Palestrina", "Palestro", "Palermiti", "Palena")));
+
+		// using prefix zol
+		mockMvc.perform(get("/city/in/italy?startWith=zol"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.*", containsInAnyOrder("Zola Predosa", "Zoldo Alto", "Zollino", "Zolla")));
 
 		mockServer.verify();
 	}
