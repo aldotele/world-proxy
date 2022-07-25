@@ -82,7 +82,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getCountry() throws Exception {
 		// stubbing the country object of the external service
-		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
 
 		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
 						.thenReturn(List.of(new CountryTranslation("italy", "italy")));
@@ -120,7 +120,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getAllCountries() throws Exception {
 		// stubbing the all countries object of the external service
-		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
 			.andExpect(method(HttpMethod.GET))
@@ -150,7 +150,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getMaps() throws Exception {
 		// stubbing the country object of the external service
-		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
 
 		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
 				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
@@ -173,7 +173,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getAllCapitals() throws Exception {
 		// stubbing the all countries object of the external service
-		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
 				.andExpect(method(HttpMethod.GET))
@@ -197,7 +197,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getAllCapitalsByContinent() throws Exception {
 		// stubbing the all countries object of the external service
-		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
 				.andExpect(method(HttpMethod.GET))
@@ -223,7 +223,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getCapital() throws Exception {
 		// stubbing the country object of the external service
-		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
 
 		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
 				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
@@ -246,7 +246,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getCurrencies() throws Exception {
 		// stubbing the country object of the external service
-		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
 
 		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
 				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
@@ -270,7 +270,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getFlag() throws Exception {
 		// stubbing the country object of the external service
-		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
 
 		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
 				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
@@ -293,7 +293,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getCountriesByPopulationRange() throws Exception {
 		// stubbing the all countries object of the external service
-		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.times(4), requestTo(new URI(restCountriesBaseUrl + "/all")))
 				.andExpect(method(HttpMethod.GET))
@@ -341,7 +341,7 @@ class WebTestsWithMockServer {
 	public void getNeighbours() throws Exception {
 		String italy = "get_country_italy.json";
 		// stubbing the country object of the external service
-		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", italy), StandardCharsets.ISO_8859_1);
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", italy), StandardCharsets.ISO_8859_1);
 
 		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
 				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
@@ -355,7 +355,7 @@ class WebTestsWithMockServer {
 				);
 
 		// stubbing the all countries object of the external service
-		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
 				.andExpect(method(HttpMethod.GET))
@@ -378,7 +378,7 @@ class WebTestsWithMockServer {
 	public void getZeroNeighbours() throws Exception {
 		String malta = "get_country_malta.json";
 		// stubbing the country object of the external service
-		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", malta), StandardCharsets.ISO_8859_1);
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", malta), StandardCharsets.ISO_8859_1);
 
 		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
 				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
@@ -392,7 +392,7 @@ class WebTestsWithMockServer {
 				);
 
 		// stubbing the all countries object of the external service
-		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
 				.andExpect(method(HttpMethod.GET))
@@ -416,7 +416,7 @@ class WebTestsWithMockServer {
 	public void getLanguages() throws Exception {
 		String malta = "get_country_malta.json";
 		// stubbing the country object of the external service
-		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", malta), StandardCharsets.ISO_8859_1);
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", malta), StandardCharsets.ISO_8859_1);
 
 		Mockito.when(countryTranslationRepository.findByTranslation("malta"))
 				.thenReturn(List.of(new CountryTranslation("malta", "malta")));
@@ -440,7 +440,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getTranslations() throws Exception {
 		// stubbing the country object of the external service
-		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalCountryResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_country_italy.json"), StandardCharsets.ISO_8859_1);
 
 		Mockito.when(countryTranslationRepository.findByTranslation("italy"))
 				.thenReturn(List.of(new CountryTranslation("italy", "italy")));
@@ -464,7 +464,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getCountriesByLanguage() throws Exception {
 		// stubbing the all countries object of the external service
-		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.twice(), requestTo(new URI(restCountriesBaseUrl + "/all")))
 				.andExpect(method(HttpMethod.GET))
@@ -488,7 +488,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getCountriesByContinent() throws Exception {
 		// stubbing the all countries object of the external service
-		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
 				.andExpect(method(HttpMethod.GET))
@@ -506,7 +506,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getAllCitiesByCountry() throws Exception {
 		// stubbing the all cities object of the external service
-		String stubbedExternalCitiesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_cities_italy.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalCitiesResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_all_cities_italy.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(countryCityBaseUrl + "/q?country=italy")))
 				.andExpect(method(HttpMethod.GET))
@@ -534,7 +534,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getAllCitiesByCountryWithPrefix() throws Exception {
 		// stubbing the all cities object of the external service
-		String stubbedExternalCitiesResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_all_cities_italy.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalCitiesResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_all_cities_italy.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.twice(), requestTo(new URI(countryCityBaseUrl + "/q?country=italy")))
 				.andExpect(method(HttpMethod.GET))
@@ -558,7 +558,7 @@ class WebTestsWithMockServer {
 	@Test
 	public void getCityDetails() throws Exception {
 		// stubbing the city details object of the external service
-		String stubbedExternalCityDetailsResponse = Files.readString(Paths.get("src", "main", "resources", "stubs", "get_city_details_rome.json"), StandardCharsets.ISO_8859_1);
+		String stubbedExternalCityDetailsResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_city_details_rome.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(apiNinjaCityBaseUrl + "?name=rome")))
 				.andExpect(method(HttpMethod.GET))
