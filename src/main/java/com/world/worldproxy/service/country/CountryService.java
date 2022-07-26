@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface CountryService {
-    List<Country> getAllCountries() throws JsonProcessingException;
+    List<String> getAllCountries() throws JsonProcessingException;
+    List<Country> getAllCountriesDetail() throws JsonProcessingException;
     Country getCountry(String name) throws JsonProcessingException;
     String getMapsByCountry(String country);
     List<String> getAllCapitals(String continent) throws JsonProcessingException;

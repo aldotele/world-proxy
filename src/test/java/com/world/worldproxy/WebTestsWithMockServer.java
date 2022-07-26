@@ -43,7 +43,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @ComponentScan("com.world.worldproxy.config")
-//@ActiveProfiles(profiles = "shallow")
 @WebMvcTest
 class WebTestsWithMockServer {
 
@@ -123,12 +122,32 @@ class WebTestsWithMockServer {
 		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
 
 		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(stubbedExternalAllCountriesResponse));
+
+		mockMvc.perform(get("/country/all"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.*", isA(ArrayList.class)))
+				.andExpect(jsonPath("$.*", hasItems("Italy", "Colombia", "Ghana", "China", "Australia")))
+				.andReturn();
+
+		mockServer.verify();
+	}
+
+	@Test
+	public void getAllCountriesDetail() throws Exception {
+		// stubbing the all countries object of the external service
+		String stubbedExternalAllCountriesResponse = Files.readString(Paths.get("src", "test", "resources", "stubs", "get_all_countries.json"), StandardCharsets.ISO_8859_1);
+
+		mockServer.expect(ExpectedCount.once(), requestTo(new URI(restCountriesBaseUrl + "/all")))
 			.andExpect(method(HttpMethod.GET))
 			.andRespond(withStatus(HttpStatus.OK)
 					.contentType(MediaType.APPLICATION_JSON)
 					.body(stubbedExternalAllCountriesResponse));
 
-		mockMvc.perform(get("/country/all"))
+		mockMvc.perform(get("/country/all?detail=true"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.*", isA(ArrayList.class)))
 			.andExpect(jsonPath("$.[*].name", hasItems("Italy", "Colombia", "Ghana", "China", "Australia")))
@@ -475,12 +494,12 @@ class WebTestsWithMockServer {
 		// expecting several countries to speak spanish
 		mockMvc.perform(get("/country/speak/italian"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.[*].name", hasItems("Italy", "Vatican City", "San Marino", "Switzerland")));
+				.andExpect(jsonPath("$.*", hasItems("Italy", "Vatican City", "San Marino", "Switzerland")));
 
 		// expecting only Finland to speak finnish
 		mockMvc.perform(get("/country/speak/finnish"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.[*].name", hasItems("Finland")));
+				.andExpect(jsonPath("$.*", hasItems("Finland")));
 
 		mockServer.verify();
 	}
@@ -498,7 +517,7 @@ class WebTestsWithMockServer {
 
 		mockMvc.perform(get("/country/in/europe"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.[*].name", hasItems("Italy", "Germany", "Spain", "Ukraine")));
+				.andExpect(jsonPath("$.*", hasItems("Italy", "Germany", "Spain", "Ukraine")));
 
 		mockServer.verify();
 	}

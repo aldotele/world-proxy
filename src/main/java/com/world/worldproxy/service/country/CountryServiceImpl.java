@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class CountryServiceImpl implements CountryService {
-
     @Autowired
     RestTemplate restTemplate;
 
@@ -41,7 +40,16 @@ public class CountryServiceImpl implements CountryService {
     String restCountriesBaseUrl;
 
     @Override
-    public List<Country> getAllCountries() throws JsonProcessingException {
+    public List<String> getAllCountries() throws JsonProcessingException {
+        ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/all", String.class);
+        List<Country> countries = Arrays.asList(objectMapper.readValue(response.getBody(), Country[].class));
+        return countries.stream()
+                .map(Country::getName)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Country> getAllCountriesDetail() throws JsonProcessingException {
         ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/all", String.class);
         List<Country> countries = Arrays.asList(objectMapper.readValue(response.getBody(), Country[].class));
         return countries;
@@ -68,12 +76,13 @@ public class CountryServiceImpl implements CountryService {
     public List<String> getAllCapitals(String continent) throws JsonProcessingException {
         return continent != null ?
 
-                getCountriesByContinent(continent).stream()
-                    .map(Country::getCapital)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList()) :
+                getAllCountriesDetail().stream()
+                        .filter(country -> country.getContinents().contains(WordUtils.capitalizeFully(continent)))
+                        .map(Country::getCapital)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList()) :
 
-                getAllCountries().stream()
+                getAllCountriesDetail().stream()
                         .map(Country::getCapital)
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList());
@@ -95,15 +104,15 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public List<Country> getCountriesByContinent(String continent) throws JsonProcessingException {
-        return getAllCountries().stream()
+    public List<String> getCountriesByContinent(String continent) throws JsonProcessingException {
+        return getAllCountriesDetail().stream()
                 .filter(country -> country.getContinents().contains(WordUtils.capitalizeFully(continent)))
+                .map(Country::getName)
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Country> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException, QueryParameterException {
-        List<Country> allCountries = getAllCountries();
+    @Override public List<String> getCountriesByPopulationRange(BigDecimal minimum, BigDecimal maximum) throws JsonProcessingException, QueryParameterException {
+        List<Country> allCountries = getAllCountriesDetail();
         // both min and max provided
         if (minimum != null & maximum != null) {
             if (minimum.compareTo(maximum) > 0) {
@@ -111,18 +120,21 @@ public class CountryServiceImpl implements CountryService {
             }
             return allCountries.stream()
                     .filter(country -> country.getPopulation().compareTo(minimum) > 0 & country.getPopulation().compareTo(maximum) < 0)
+                    .map(Country::getName)
                     .collect(Collectors.toList());
         }
         // only min provided
         else if (minimum != null & maximum == null) {
             return allCountries.stream()
                     .filter(country -> country.getPopulation().compareTo(minimum) > 0)
+                    .map(Country::getName)
                     .collect(Collectors.toList());
         }
         // only max provided
-        else if (maximum != null & minimum == null) {
+        else if (maximum != null) {
             return allCountries.stream()
                     .filter(country -> country.getPopulation().compareTo(maximum) < 0)
+                    .map(Country::getName)
                     .collect(Collectors.toList());
         }
         else {
@@ -131,23 +143,24 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public List<Country> getCountryNeighbours(String country) throws JsonProcessingException {
+    public List<String> getCountryNeighbours(String country) throws JsonProcessingException {
         String acronym = getCountry(country).getAcronym();
-        List<Country> allCountries = getAllCountries();
-        List<Country> neighbours = allCountries.stream()
+        List<Country> allCountries = getAllCountriesDetail();
+        return allCountries.stream()
                 .filter(c -> Objects.nonNull(c.getBorders()))
                 .filter(cc -> cc.getBorders().contains(acronym))
+                .map(Country::getName)
                 .collect(Collectors.toList());
-        return neighbours;
     }
 
     @Override
-    public List<Country> getCountriesByLanguage(String language) throws JsonProcessingException {
+    public List<String> getCountriesByLanguage(String language) throws JsonProcessingException {
         String capitalized = Character.toUpperCase(language.charAt(0)) + language.substring(1).toLowerCase();
-        List<Country> all = getAllCountries();
-        return all.stream()
+        List<Country> allCountries = getAllCountriesDetail();
+        return allCountries.stream()
                 .filter(country -> country.getLanguages() != null)
                 .filter(country -> country.getLanguages().contains(capitalized))
+                .map(Country::getName)
                 .collect(Collectors.toList());
     }
 
@@ -162,10 +175,12 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public List<Country> getCountriesMultilingual() throws JsonProcessingException {
-        return getAllCountries().stream()
+    public List<String> getCountriesMultilingual() throws JsonProcessingException {
+        return getAllCountriesDetail().stream()
                 .filter(country -> country.getLanguages() != null)
                 .filter(country -> country.getLanguages().size() > 1)
+                .map(Country::getName)
                 .collect(Collectors.toList());
     }
+
 }

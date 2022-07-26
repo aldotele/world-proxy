@@ -9,6 +9,8 @@ import com.world.worldproxy.service.country.CountryService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -29,8 +31,9 @@ public class CountryController {
 
     @Operation(description = "Get all countries")
     @GetMapping("/all")
-    List<Country> getAllCountries() throws JsonProcessingException {
-        return countryService.getAllCountries();
+    ResponseEntity<?> getAllCountries(@RequestParam(required = false) boolean detail) throws JsonProcessingException {
+        return detail ? new ResponseEntity<List<Country>>(countryService.getAllCountriesDetail(), HttpStatus.OK) :
+                new ResponseEntity<List<String>>(countryService.getAllCountries(), HttpStatus.OK);
     }
 
     @Operation(description = "Get single country by name")
