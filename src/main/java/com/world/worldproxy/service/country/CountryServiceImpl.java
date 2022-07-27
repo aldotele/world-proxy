@@ -66,7 +66,8 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public String getMapsByCountry(String country) {
-        ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + country, String.class);
+        String englishName = languageNormalizer.normalizeToEnglish(country);
+        ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + englishName, String.class);
         JSONArray jsonArr = new JSONArray(response.getBody());
         JSONObject jsonObj = (JSONObject) jsonArr.get(0);
         return (String) jsonObj.getJSONObject("maps").get("googleMaps");
