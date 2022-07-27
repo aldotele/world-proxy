@@ -7,6 +7,7 @@ import com.world.worldproxy.error.CityNotFound;
 import com.world.worldproxy.model.City;
 import com.world.worldproxy.model.request.ApiKeyRequest;
 import com.world.worldproxy.model.response.external.CountryCitiesExternalResponse;
+import com.world.worldproxy.service.multilingual.LanguageNormalizer;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,9 @@ public class CityServiceImpl implements CityService {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    LanguageNormalizer languageNormalizer;
+
     @Value("${api.ninjas.city.base.url}")
     String apiNinjaCityBaseUrl;
 
@@ -40,7 +44,8 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<String> getCities(String country, String startWith) throws JsonProcessingException {
-        ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + "q?country=" + country, String.class);
+        String englishName = languageNormalizer.normalizeToEnglish(country);
+        ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + "q?country=" + englishName, String.class);
         CountryCitiesExternalResponse externalResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
         List<String> allCountryCities = externalResponse.getData();
         return startWith != null ? allCountryCities.stream()
