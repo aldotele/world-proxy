@@ -22,9 +22,9 @@ Example: ***/country/spain*** will work, ***/country/spagna*** won't.\
 
 
 - It is possible to activate a **multilingual** version of the
-application, thus making it possible to pass a country name in <u>**ANY**</u> language\
-Example: ***/country/spain***, ***/country/spagna***, ***/country/"西班牙"***, ... ,  they
-will all work!
+application, thus making it possible to pass a country name in <u>**ANY**</u> language.\
+Example: */country/spain*, */country/spagna*, */country/西班牙*, ... ,  they
+will all work!\
 *note*: the multilingual version needs a database.
 
 <u>How to switch profiles</u>?\
