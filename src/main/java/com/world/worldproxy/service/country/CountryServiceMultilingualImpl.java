@@ -2,13 +2,18 @@ package com.world.worldproxy.service.country;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.world.worldproxy.WorldProxyApplication;
 import com.world.worldproxy.exception.QueryParameterException;
 import com.world.worldproxy.model.Country;
+import com.world.worldproxy.repository.CountryTranslationRepository;
+import com.world.worldproxy.service.multilingual.LanguageNormalizer;
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,13 +26,21 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class CountryServiceImpl implements CountryService {
+@Profile(WorldProxyApplication.MULTILINGUAL)
+@Primary
+public class CountryServiceMultilingualImpl implements CountryService {
 
     @Autowired
     RestTemplate restTemplate;
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    CountryTranslationRepository countryTranslationRepository;
+
+    @Autowired
+    LanguageNormalizer languageNormalizer;
 
     @Value("${restcountries.base.url}")
     String restCountriesBaseUrl;
@@ -51,6 +64,7 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public Country getCountry(String name) throws JsonProcessingException {
+        name = languageNormalizer.normalizeToEnglish(name);
         ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + name, String.class);
         JSONArray jsonArray = new JSONArray(response.getBody());
         Country country = objectMapper.readValue(jsonArray.get(0).toString(), Country.class);
@@ -59,6 +73,7 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public String getMapsByCountry(String country) {
+        country = languageNormalizer.normalizeToEnglish(country);
         ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + country, String.class);
         JSONArray jsonArr = new JSONArray(response.getBody());
         JSONObject jsonObj = (JSONObject) jsonArr.get(0);
@@ -177,3 +192,4 @@ public class CountryServiceImpl implements CountryService {
     }
 
 }
+

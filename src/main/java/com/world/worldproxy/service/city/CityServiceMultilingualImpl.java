@@ -3,13 +3,17 @@ package com.world.worldproxy.service.city;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.world.worldproxy.WorldProxyApplication;
 import com.world.worldproxy.error.CityNotFound;
 import com.world.worldproxy.model.City;
 import com.world.worldproxy.model.request.ApiKeyRequest;
 import com.world.worldproxy.model.response.external.CountryCitiesExternalResponse;
+import com.world.worldproxy.service.multilingual.LanguageNormalizer;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +25,18 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class CityServiceImpl implements CityService {
+@Profile(WorldProxyApplication.MULTILINGUAL)
+@Primary
+public class CityServiceMultilingualImpl implements CityService {
 
     @Autowired
     RestTemplate restTemplate;
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    LanguageNormalizer languageNormalizer;
 
     @Value("${api.ninjas.city.base.url}")
     String apiNinjaCityBaseUrl;
@@ -41,6 +50,7 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<String> getCities(String country, String startWith) throws JsonProcessingException {
+        country = languageNormalizer.normalizeToEnglish(country);
         ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + "q?country=" + country, String.class);
         CountryCitiesExternalResponse externalResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
         List<String> allCountryCities = externalResponse.getData();
@@ -67,3 +77,5 @@ public class CityServiceImpl implements CityService {
         }
     }
 }
+
+

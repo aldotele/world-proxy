@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.WorldProxyApplication;
 import com.world.worldproxy.service.multilingual.LanguageNormalizer;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,11 +15,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
 @Configuration
-@Profile("default")
+@Profile("multilingual")
 @ComponentScan("com.world.worldproxy.service")
 @EnableWebMvc
-@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
-public class WorldProxyConfiguration {
+public class WorldProxyMultilingualConfiguration {
 
     @Bean
     public RestTemplate restTemplate() {
