@@ -17,7 +17,7 @@ Some of the available features are:
 
 - The **default service "speaks" English**. This means country names must be passed
 in English inside API placeholders, in order to receive results.\
-Example: ***/country/spain*** will work, ***/country/spagna*** won't.\
+Example: */country/spain* will work, */country/spagna* won't.\
 *note*: this default profile does not need a database.
 
 
