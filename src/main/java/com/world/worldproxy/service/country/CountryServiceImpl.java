@@ -2,6 +2,7 @@ package com.world.worldproxy.service.country;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.world.worldproxy.WorldProxyApplication;
 import com.world.worldproxy.exception.QueryParameterException;
 import com.world.worldproxy.model.Country;
 import com.world.worldproxy.repository.CountryTranslationRepository;
@@ -25,7 +26,6 @@ import java.util.stream.Collectors;
 @Service
 public class CountryServiceImpl implements CountryService {
 
-    public static final String MULTILINGUAL_PROFILE = "multilingual";
 
     @Autowired
     RestTemplate restTemplate;
@@ -63,7 +63,7 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public Country getCountry(String name) throws JsonProcessingException {
-        if (Objects.equals(activeProfile, MULTILINGUAL_PROFILE)) {
+        if (Objects.equals(activeProfile, WorldProxyApplication.MULTILINGUAL)) {
             name = languageNormalizer.normalizeToEnglish(name);
         }
         ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + name, String.class);
@@ -74,7 +74,7 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public String getMapsByCountry(String country) {
-        if (Objects.equals(activeProfile, MULTILINGUAL_PROFILE)) {
+        if (Objects.equals(activeProfile, WorldProxyApplication.MULTILINGUAL)) {
             country = languageNormalizer.normalizeToEnglish(country);
         }
         ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + country, String.class);

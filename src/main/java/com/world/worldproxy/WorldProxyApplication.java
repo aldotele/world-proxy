@@ -24,6 +24,8 @@ import java.util.List;
 @SpringBootApplication
 public class WorldProxyApplication {
 
+	public static final String MULTILINGUAL = "multilingual";
+
 	public static void main(String[] args) {
 		SpringApplication.run(WorldProxyApplication.class, args);
 	}

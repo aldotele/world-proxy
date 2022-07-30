@@ -3,6 +3,7 @@ package com.world.worldproxy.service.city;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.world.worldproxy.WorldProxyApplication;
 import com.world.worldproxy.error.CityNotFound;
 import com.world.worldproxy.model.City;
 import com.world.worldproxy.model.request.ApiKeyRequest;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -42,10 +44,15 @@ public class CityServiceImpl implements CityService {
     @Value("${countrycity.base.url}")
     String countryCityBaseUrl;
 
+    @Value("${spring.profiles.active:default}")
+    String activeProfile;
+
     @Override
     public List<String> getCities(String country, String startWith) throws JsonProcessingException {
-        String englishName = languageNormalizer.normalizeToEnglish(country);
-        ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + "q?country=" + englishName, String.class);
+        if (Objects.equals(activeProfile, WorldProxyApplication.MULTILINGUAL)) {
+            country = languageNormalizer.normalizeToEnglish(country);
+        }
+        ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + "q?country=" + country, String.class);
         CountryCitiesExternalResponse externalResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
         List<String> allCountryCities = externalResponse.getData();
         return startWith != null ? allCountryCities.stream()
