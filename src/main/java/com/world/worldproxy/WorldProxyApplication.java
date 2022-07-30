@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +20,30 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.List;
 
+
 @SpringBootApplication
-public class WorldProxyApplication implements CommandLineRunner {
+public class WorldProxyApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(WorldProxyApplication.class, args);
+	}
+
+	@RestController
+	@RequestMapping(path = "")
+	public static class WelcomeController {
+
+		@GetMapping("")
+		String welcome() {
+			return "Welcome to World Proxy service";
+		}
+	}
+
+}
+
+
+@Component
+@Profile(value = "multilingual")
+class MultilingualRunner implements CommandLineRunner {
 
 	@Value("${restcountries.base.url}")
 	String restCountriesBaseUrl;
@@ -33,12 +57,9 @@ public class WorldProxyApplication implements CommandLineRunner {
 	@Autowired
 	ObjectMapper objectMapper;
 
-	public static void main(String[] args) {
-		SpringApplication.run(WorldProxyApplication.class, args);
-	}
-
 	@Override
 	public void run(String... args) throws Exception {
+
 		List<CountryTranslation> saved = countryTranslationRepository.findAll();
 		if (saved.size() == 0) {
 			// saving on database all translations for each country
@@ -56,16 +77,5 @@ public class WorldProxyApplication implements CommandLineRunner {
 			);
 		}
 	}
-
-	@RestController
-	@RequestMapping(path = "")
-	public static class WelcomeController {
-
-		@GetMapping("")
-		String welcome() {
-			return "Welcome to World Proxy service";
-		}
-	}
-
 }
 

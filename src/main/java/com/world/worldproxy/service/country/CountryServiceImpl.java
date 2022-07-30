@@ -24,6 +24,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class CountryServiceImpl implements CountryService {
+
+    public static final String MULTILINGUAL_PROFILE = "multilingual";
+
     @Autowired
     RestTemplate restTemplate;
 
@@ -38,6 +41,9 @@ public class CountryServiceImpl implements CountryService {
 
     @Value("${restcountries.base.url}")
     String restCountriesBaseUrl;
+
+    @Value("${spring.profiles.active:default}")
+    String activeProfile;
 
     @Override
     public List<String> getAllCountries() throws JsonProcessingException {
@@ -57,8 +63,10 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public Country getCountry(String name) throws JsonProcessingException {
-        String englishName = languageNormalizer.normalizeToEnglish(name);
-        ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + englishName, String.class);
+        if (Objects.equals(activeProfile, MULTILINGUAL_PROFILE)) {
+            name = languageNormalizer.normalizeToEnglish(name);
+        }
+        ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + name, String.class);
         JSONArray jsonArray = new JSONArray(response.getBody());
         Country country = objectMapper.readValue(jsonArray.get(0).toString(), Country.class);
         return country;
@@ -66,8 +74,10 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public String getMapsByCountry(String country) {
-        String englishName = languageNormalizer.normalizeToEnglish(country);
-        ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + englishName, String.class);
+        if (Objects.equals(activeProfile, MULTILINGUAL_PROFILE)) {
+            country = languageNormalizer.normalizeToEnglish(country);
+        }
+        ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + country, String.class);
         JSONArray jsonArr = new JSONArray(response.getBody());
         JSONObject jsonObj = (JSONObject) jsonArr.get(0);
         return (String) jsonObj.getJSONObject("maps").get("googleMaps");
