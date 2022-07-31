@@ -56,6 +56,12 @@ class MultilingualRunner implements CommandLineRunner {
 	@Value("${spring.datasource.url}")
 	String datasourceUrl;
 
+	@Value("${spring.datasource.username}")
+	String datasourceUsername;
+
+	@Value("${spring.datasource.password}")
+	String datasourcePassword;
+
 	@Autowired
 	CountryTranslationRepository countryTranslationRepository;
 
@@ -67,8 +73,7 @@ class MultilingualRunner implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		// TODO try connection to db, if db is not present, create it
-		Connection connection = DriverManager.getConnection(datasourceUrl, "root", "root");
+		Connection connection = DriverManager.getConnection(datasourceUrl, datasourceUsername, datasourcePassword);
 
 		String countryTranslationTable = "country_translation";
 		if (!isTablePresentSQL(connection, countryTranslationTable)) {
@@ -77,8 +82,8 @@ class MultilingualRunner implements CommandLineRunner {
 		}
 
 		// TODO find smarter way to check if table is filled with data
-		List<CountryTranslation> saved = countryTranslationRepository.findAll();
-		if (saved.size() == 0) {
+		List<CountryTranslation> data = countryTranslationRepository.findAll();
+		if (data.size() == 0) {
 			// saving on database all translations for each country
 			// this is done to support multilingual country queries
 			// e.g. queries such as "deutschland" and "germania" will be standardized to "germany" after looking on db
