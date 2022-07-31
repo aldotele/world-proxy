@@ -72,7 +72,7 @@ class MultilingualRunner implements CommandLineRunner {
 
 		String countryTranslationTable = "country_translation";
 		if (!isTablePresentSQL(connection, countryTranslationTable)) {
-			log.info("creating" + countryTranslationTable + " table ...");
+			log.info("SQL statement: creating " + countryTranslationTable + " table ...");
 			createTableSQL(connection, countryTranslationTable);
 		}
 
