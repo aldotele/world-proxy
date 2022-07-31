@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.entity.CountryTranslation;
 import com.world.worldproxy.model.Country;
 import com.world.worldproxy.repository.CountryTranslationRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,10 +47,14 @@ public class WorldProxyApplication {
 
 @Component
 @Profile(value = "multilingual")
+@Slf4j
 class MultilingualRunner implements CommandLineRunner {
 
 	@Value("${restcountries.base.url}")
 	String restCountriesBaseUrl;
+
+	@Value("${spring.datasource.url}")
+	String datasourceUrl;
 
 	@Autowired
 	CountryTranslationRepository countryTranslationRepository;
@@ -61,7 +67,16 @@ class MultilingualRunner implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		// TODO try connection to db, if db is not present, create it
+		Connection connection = DriverManager.getConnection(datasourceUrl, "root", "root");
 
+		String countryTranslationTable = "country_translation";
+		if (!isTablePresentSQL(connection, countryTranslationTable)) {
+			log.info("creating" + countryTranslationTable + " table ...");
+			createTableSQL(connection, countryTranslationTable);
+		}
+
+		// TODO find smarter way to check if table is filled with data
 		List<CountryTranslation> saved = countryTranslationRepository.findAll();
 		if (saved.size() == 0) {
 			// saving on database all translations for each country
@@ -78,6 +93,29 @@ class MultilingualRunner implements CommandLineRunner {
 					))
 			);
 		}
+	}
+
+	private boolean isTablePresentSQL(Connection connection, String tableName) throws SQLException {
+		PreparedStatement preparedStatement = connection.prepareStatement(
+				"SELECT count(*) "
+				+ "FROM information_schema.tables "
+				+ "WHERE table_name = ?"
+				+ "LIMIT 1;");
+		preparedStatement.setString(1, tableName);
+
+		ResultSet resultSet = preparedStatement.executeQuery();
+		resultSet.next();
+		boolean isPresent = resultSet.getInt(1) != 0;
+		return isPresent;
+	}
+
+	private void createTableSQL(Connection connection, String tableName) throws SQLException {
+		// TODO replace hardcoded table name with placeholder
+		PreparedStatement preparedStatement = connection.prepareStatement(
+				"create table country_translation "
+						+ "(id int auto_increment, country varchar(255), translation varchar(255), primary key(id));");
+//		preparedStatement.setString(1, tableName);
+		preparedStatement.executeUpdate();
 	}
 }
 
