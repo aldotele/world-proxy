@@ -17,15 +17,16 @@ Some of the available features are:
 
 - The **default service "speaks" English**. This means country names must be passed
 in English inside API placeholders, in order to receive results.\
-Example: */country/spain* will work, */country/spagna* won't.\
+Example: */country/spain* will work, but */country/spagna* won't.\
 *note*: this default profile does not need a database.
 
 
 - It is possible to activate a **multilingual** version of the
 application, thus making it possible to pass a country name in <u>**ANY**</u> language.\
-Example: */country/spain*, */country/spagna*, */country/西班牙*, ... ,  they
+Example: */country/spain*, */country/spagna*, */country/hiszpania*, */country/西班牙*, ... ,  they
 will all work!\
-*note*: the multilingual version needs a database.
+*note*: the multilingual version needs a SQL database 
+with an empty **worldproxy** schema (check *src/main/resources/application-multilingual.properties* for a reference).
 
 <u>How to switch profiles</u>?\
 Go to *src/main/resources/application.properties*\
