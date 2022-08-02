@@ -61,7 +61,7 @@ class WebDefaultTests {
 	private ObjectMapper objectMapper;
 
 	@MockBean
-	CountryTranslationRepository countryTranslationRepository;
+	private CountryTranslationRepository countryTranslationRepository;
 
 	private MockRestServiceServer mockServer;
 
