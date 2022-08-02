@@ -101,13 +101,9 @@ class MultilingualRunner implements CommandLineRunner {
 	}
 
 	private boolean isTablePresentSQL(Connection connection, String tableName) throws SQLException {
-		PreparedStatement preparedStatement = connection.prepareStatement(
-				"SELECT count(*) "
-				+ "FROM information_schema.tables "
-				+ "WHERE table_name = ?"
-				+ "LIMIT 1;");
+		String query = "SELECT count(*) FROM information_schema.tables WHERE table_name = ? LIMIT 1;";
+		PreparedStatement preparedStatement = connection.prepareStatement(query);
 		preparedStatement.setString(1, tableName);
-
 		ResultSet resultSet = preparedStatement.executeQuery();
 		resultSet.next();
 		boolean isPresent = resultSet.getInt(1) != 0;
@@ -116,9 +112,8 @@ class MultilingualRunner implements CommandLineRunner {
 
 	private void createTableSQL(Connection connection, String tableName) throws SQLException {
 		// TODO replace hardcoded table name with placeholder
-		PreparedStatement preparedStatement = connection.prepareStatement(
-				"create table country_translation "
-						+ "(id int auto_increment, country varchar(255), translation varchar(255), primary key(id));");
+		String query = "CREATE table country_translation (id int auto_increment, country varchar(255), translation varchar(255), primary key(id));";
+		PreparedStatement preparedStatement = connection.prepareStatement(query);
 //		preparedStatement.setString(1, tableName);
 		preparedStatement.executeUpdate();
 	}
