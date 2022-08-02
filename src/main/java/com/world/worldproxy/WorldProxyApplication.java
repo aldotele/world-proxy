@@ -111,10 +111,8 @@ class MultilingualRunner implements CommandLineRunner {
 	}
 
 	private void createTableSQL(Connection connection, String tableName) throws SQLException {
-		// TODO replace hardcoded table name with placeholder
-		String query = "CREATE table country_translation (id int auto_increment, country varchar(255), translation varchar(255), primary key(id));";
+		String query = "CREATE table " + tableName + " (id int auto_increment, country varchar(255), translation varchar(255), primary key(id));";
 		PreparedStatement preparedStatement = connection.prepareStatement(query);
-//		preparedStatement.setString(1, tableName);
 		preparedStatement.executeUpdate();
 	}
 }
