@@ -81,9 +81,9 @@ class MultilingualRunner implements CommandLineRunner {
 			createTableSQL(connection, countryTranslationTable);
 		}
 
-		// TODO find smarter way to check if table is filled with data
+		// TODO find smarter way to check if table is filled with the right data
 		List<CountryTranslation> data = countryTranslationRepository.findAll();
-		if (data.size() == 0) {
+		if (data.isEmpty()) {
 			// saving on database all translations for each country
 			// this is done to support multilingual country queries
 			// e.g. queries such as "deutschland" and "germania" will be standardized to "germany" after looking on db
@@ -92,7 +92,8 @@ class MultilingualRunner implements CommandLineRunner {
 
 			// for each country, each translation will be extracted and saved in a row
 			// example of a database row will be translation=italia, country=italy
-			allCountries.forEach(country -> country.getTranslations().stream().distinct()
+			allCountries.forEach(country -> country.getTranslations().stream()
+					.distinct()
 					.forEach(translation -> countryTranslationRepository.save(
 							new CountryTranslation(translation, country.getName())
 					))
