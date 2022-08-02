@@ -19,6 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,7 +45,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ComponentScan("com.world.worldproxy.config")
 @WebMvcTest
-class WebTestsWithMockServer {
+@ActiveProfiles("default")
+class WebDefaultTests {
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -53,7 +55,7 @@ class WebTestsWithMockServer {
 	private MockMvc mockMvc;
 
 	@Autowired
-	CountryService countryService;
+	private CountryService countryService;
 
 	@Autowired
 	private ObjectMapper objectMapper;
