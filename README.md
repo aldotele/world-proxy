@@ -27,6 +27,8 @@ Some of the available features are:
 - city details
 - ... and a lot more
 
+<br/>
+
 ### Application Profiles
 
 - The **default service "speaks" English**. This means country names must be passed
@@ -46,6 +48,7 @@ with an empty **worldproxy** schema (check *src/main/resources/application-multi
 Go to *src/main/resources/application.properties*\
 change the value of `spring.profiles.active` to `multilingual`
 
+<br/>
 
 ## Run with Docker
 
