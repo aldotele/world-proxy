@@ -8,9 +8,9 @@
 
 <div align="center">
 
-[Intro](#intro)\
-[Application Profiles](#application-profiles)\
-[Run With Docker](#run-with-docker)
+1 . [Intro](#intro)\
+2 . [Application Profiles](#application-profiles)\
+3 . [Run With Docker](#run-with-docker)
 
 </div>
 
