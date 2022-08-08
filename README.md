@@ -32,12 +32,6 @@ with an empty **worldproxy** schema (check *src/main/resources/application-multi
 Go to *src/main/resources/application.properties*\
 change the value of `spring.profiles.active` to `multilingual`
 
-### Api Documentation Swagger
-Once the application is running, navigate to:
-http://localhost:8080/swagger-ui/index.html
-
-for a complete documentation of all available endpoints.
-
 
 ## Run with Docker
 
@@ -49,7 +43,7 @@ Run the following commands from the terminal (replacing the placeholders with yo
 - Navigate to http://localhost:8080 and you should see this message:\
 *Welcome to World Proxy service*
 
-- Access the [Swagger UI here](http://localhost:8080/swagger-ui/index.html)
+- Access the [Swagger UI](http://localhost:8080/swagger-ui/index.html) to try out all available endpoints
 
 ----------
 #### Multilingual Application
