@@ -1,5 +1,10 @@
-## World Proxy
+<h2 align="center">
+    World Proxy
+</h2>
 
+<p align="center">
+  <img width="70" height="70" src="https://storage.googleapis.com/siteassetsswd/198/slideshow/663/20200625074107_56_o_1ba8en13b14c61b15hei1bd63jlc.jpg" alt="Material Bread logo">
+</p>
 
 The service works as an aggregator of world countries and cities
 information by exposing a series of APIs and proxying requests to
