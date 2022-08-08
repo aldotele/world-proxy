@@ -16,16 +16,16 @@ Some of the available features are:
 ### Application Profiles
 
 - The **default service "speaks" English**. This means country names must be passed
-in English inside API placeholders, in order to receive results.\
+in English inside API paths, in order to receive results.\
 Example: */country/spain* will work, but */country/spagna* won't.\
 *note*: this default profile does not need a database.
 
 
-- It is possible to activate a **multilingual** version of the
-application, thus making it possible to pass a country name in <u>**ANY**</u> language.\
+- The **multilingual** version of the
+application makes it possible to pass a country name in <u>**ANY**</u> language.\
 Example: */country/spain*, */country/spagna*, */country/hiszpania*, */country/西班牙*, ... ,  they
 will all work!\
-*note*: the multilingual version needs a SQL database 
+*note*: the multilingual profile needs a SQL database 
 with an empty **worldproxy** schema (check *src/main/resources/application-multilingual.properties* for a reference).
 
 <u>How to switch profiles</u>?\
@@ -39,11 +39,18 @@ http://localhost:8080/swagger-ui/index.html
 for a complete documentation of all available endpoints.
 
 
-### Run with Docker [WIP]
-`docker-compose up`
+## Run with Docker
 
-will use the *docker-compose.yml* to build an image from the *Dockerfile* and
-start a container on port 8080, hosted on port 8080 locally.
+#### Default Application
+Run the following commands from the terminal (replacing the placeholders with your choice):
+1) `docker build -t {yourImageName} .`
+2) `docker run -d --name {yourContainerName} -p 8080:8080 {yourImageName}`
 
-Navigate to http://localhost:8080 and you should see this message:\
+- Navigate to http://localhost:8080 and you should see this message:\
 *Welcome to World Proxy service*
+
+- Access the [Swagger UI here](http://localhost:8080/swagger-ui/index.html)
+
+----------
+#### Multilingual Application
+... [Work in progress] ...
