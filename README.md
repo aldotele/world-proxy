@@ -6,10 +6,13 @@
   <img width="70" height="70" src="https://storage.googleapis.com/siteassetsswd/198/slideshow/663/20200625074107_56_o_1ba8en13b14c61b15hei1bd63jlc.jpg" alt="Material Bread logo">
 </p>
 
+<div align="center">
 
-1. [Intro](#intro)
-2. [Application Profiles](#application-profiles)
-3. [Run With Docker](#run-with-docker)
+[Intro](#intro)\
+[Application Profiles](#application-profiles)\
+[Run With Docker](#run-with-docker)
+
+</div>
 
 ### Intro
 The service works as an aggregator of world countries and cities
