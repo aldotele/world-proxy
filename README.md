@@ -6,13 +6,11 @@
   <img width="70" height="70" src="https://storage.googleapis.com/siteassetsswd/198/slideshow/663/20200625074107_56_o_1ba8en13b14c61b15hei1bd63jlc.jpg" alt="Material Bread logo">
 </p>
 
-<div align="center">
 
 1 . [Intro](#intro)\
 2 . [Application Profiles](#application-profiles)\
 3 . [Run With Docker](#run-with-docker)
 
-</div>
 
 ### Intro
 The service works as an aggregator of world countries and cities
@@ -53,7 +51,7 @@ change the value of `spring.profiles.active` to `multilingual`
 ## Run with Docker
 
 #### Default Application
-Run the following commands from the terminal (replacing the placeholders with your choice):
+Run the following commands from the terminal (remember to replace the placeholders with your choices):
 1) `docker build -t {yourImageName} .`
 2) `docker run -d --name {yourContainerName} -p 8080:8080 {yourImageName}`
 
