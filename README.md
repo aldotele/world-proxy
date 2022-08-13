@@ -52,11 +52,11 @@ change the value of `spring.profiles.active` to `multilingual`
 ## Run with Docker
 
 #### Default Application
-Run the following commands from the terminal (remember to replace the placeholders with your choices):
-1) `docker build -t {yourImageName} .`
-2) `docker run -d --name {yourContainerName} -p 8080:8080 {yourImageName}`
+From the project root directory, run on terminal the following command:
+- `docker-compose up`
 
-- Navigate to http://localhost:8080 and you should see this message:\
+When you see the *Started WorldProxyApplication* message: 
+- Navigate to http://localhost:8080 and you should see this:\
 *Welcome to World Proxy service*
 
 - Access the [Swagger UI](http://localhost:8080/swagger-ui/index.html) to try out all available endpoints
