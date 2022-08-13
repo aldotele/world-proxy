@@ -79,11 +79,13 @@ class MultilingualRunner implements CommandLineRunner {
 		if (!isTablePresentSQL(connection, countryTranslationTable)) {
 			log.info("SQL statement: creating " + countryTranslationTable + " table ...");
 			createTableSQL(connection, countryTranslationTable);
+			log.info("SQL statement: created!");
 		}
 
 		// TODO find smarter way to check if table is filled with the right data
 		List<CountryTranslation> data = countryTranslationRepository.findAll();
 		if (data.isEmpty()) {
+			log.info("SQL statement: populating " + countryTranslationTable + " with data ...");
 			// saving on database all translations for each country
 			// this is done to support multilingual country queries
 			// e.g. queries such as "deutschland" and "germania" will be standardized to "germany" after looking on db
@@ -98,6 +100,7 @@ class MultilingualRunner implements CommandLineRunner {
 							new CountryTranslation(translation, country.getName())
 					))
 			);
+			log.info("SQL statement: populated!");
 		}
 	}
 
