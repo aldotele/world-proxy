@@ -40,8 +40,8 @@ Example: */country/spain* will work, but */country/spagna* won't.\
 application makes it possible to pass a country name in <u>**ANY**</u> language.\
 Example: */country/spain*, */country/spagna*, */country/hiszpania*, */country/西班牙*, ... ,  they
 will all work!\
-*note*: the multilingual profile needs a SQL database 
-with an empty **worldproxy** schema (check *src/main/resources/application-multilingual.properties* for a reference).
+*note*: the multilingual profile needs a MySQL database connection 
+(check src/main/resources/application-multilingual.properties for a reference).
 
 <u>How to switch profiles</u>?
 - With Docker &rarr; check [Run With Docker](#run-with-docker) section below
