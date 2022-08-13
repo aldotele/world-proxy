@@ -62,7 +62,7 @@ From the project root directory, run on terminal the following command:
 
 ----------
 
-After you see the *Started WorldProxyApplication* message:
+After you see on terminal the *Started WorldProxyApplication* log INFO message:
 - Navigate to http://localhost:8080 and you should see this:\
   *Welcome to World Proxy service*
 
