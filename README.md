@@ -55,12 +55,19 @@ change the value of `spring.profiles.active` to `multilingual`
 From the project root directory, run on terminal the following command:
 - `docker-compose up`
 
-When you see the *Started WorldProxyApplication* message: 
+----------
+#### Multilingual Application
+From the project root directory, run on terminal the following command:
+- `docker-compose -f docker-compose.multilingual.yml up`
+
+----------
+
+After you see the *Started WorldProxyApplication* message:
 - Navigate to http://localhost:8080 and you should see this:\
-*Welcome to World Proxy service*
+  *Welcome to World Proxy service*
 
 - Access the [Swagger UI](http://localhost:8080/swagger-ui/index.html) to try out all available endpoints
 
-----------
-#### Multilingual Application
-... [Work in progress] ...
+*note:* for the **multilingual** profile, it might take a few minutes for the database to 
+be ready. You should see at some point on terminal the following message:
+*SQL statement: populated!*,  meaning everything is set and ready!
