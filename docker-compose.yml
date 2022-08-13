@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  server:
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/worldproxy?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - db
+    networks:
+      - worldproxy_net
+
+  db:
+    image: "mysql:8.0"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: worldproxy
+      MYSQL_PASSWORD: root
+    ports:
+      - 3307:3306
+    networks:
+      - worldproxy_net
+
+networks:
+  worldproxy_net:
