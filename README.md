@@ -43,9 +43,10 @@ will all work!\
 *note*: the multilingual profile needs a SQL database 
 with an empty **worldproxy** schema (check *src/main/resources/application-multilingual.properties* for a reference).
 
-<u>How to switch profiles</u>?\
-Go to *src/main/resources/application.properties*\
-change the value of `spring.profiles.active` to `multilingual`
+<u>How to switch profiles</u>?
+- With Docker &rarr; check [Run With Docker](#run-with-docker) section below
+- With JDK on your machine &rarr; go to *src/main/resources/application.properties* and
+change the value of `spring.profiles.active` to `multilingual` before running the application
 
 <br/>
 
