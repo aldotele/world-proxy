@@ -14,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.Enumeration;
 import java.util.List;
 
 
@@ -80,8 +82,17 @@ public class CountryController {
 
     @Operation(description = "Get countries by population range")
     @GetMapping("")
-    List<Country> getCountriesByPopulationRange(@RequestParam(required = false) BigDecimal minPopulation,
+    List<Country> getCountriesByPopulationRange(HttpServletRequest request,
+                                                @RequestParam(required = false) BigDecimal minPopulation,
                                                 @RequestParam(required = false) BigDecimal maxPopulation) throws JsonProcessingException, QueryParameterException {
+        List<String> allowedParams = List.of("minPopulation", "maxPopulation");
+        Enumeration<String> parameterNames = request.getParameterNames();
+        while (parameterNames.hasMoreElements()) {
+            String nextParam = parameterNames.nextElement();
+            if (!allowedParams.contains(nextParam)) {
+                throw new QueryParameterException("error with query parameter " + nextParam + ": not allowed");
+            }
+        }
         return countryService.getCountriesByPopulationRange(minPopulation, maxPopulation);
     }
 
