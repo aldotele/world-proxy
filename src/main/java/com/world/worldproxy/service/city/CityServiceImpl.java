@@ -3,7 +3,7 @@ package com.world.worldproxy.service.city;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.world.worldproxy.error.CityNotFound;
+import com.world.worldproxy.exception.CityNotFoundException;
 import com.world.worldproxy.model.City;
 import com.world.worldproxy.model.request.ApiKeyRequest;
 import com.world.worldproxy.model.response.external.CountryCitiesExternalResponse;
@@ -50,7 +50,7 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public City getCityDetails(String name) throws JsonProcessingException, CityNotFound {
+    public City getCityDetails(String name) throws JsonProcessingException, CityNotFoundException {
         HttpEntity<String> apiKeyRequest = ApiKeyRequest.buildRequest(apiNinjaApiKey);
 
         ResponseEntity<String> response = restTemplate.exchange(apiNinjaCityBaseUrl + "?name=" + name,
@@ -63,7 +63,7 @@ public class CityServiceImpl implements CityService {
             City city = objectMapper.readValue(jsonArray.get(0).toString(), City.class);
             return city;
         } else {
-            throw new CityNotFound();
+            throw new CityNotFoundException(name);
         }
     }
 }

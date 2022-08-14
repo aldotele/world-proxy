@@ -2,15 +2,16 @@ package com.world.worldproxy.service.country;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.world.worldproxy.exception.CountryNotFoundException;
 import com.world.worldproxy.exception.QueryParameterException;
 import com.world.worldproxy.model.Country;
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -50,19 +51,20 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public Country getCountry(String name) throws JsonProcessingException {
-        ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + name, String.class);
-        JSONArray jsonArray = new JSONArray(response.getBody());
-        Country country = objectMapper.readValue(jsonArray.get(0).toString(), Country.class);
-        return country;
+    public Country getCountry(String name) throws JsonProcessingException, CountryNotFoundException {
+        try {
+            ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + name, String.class);
+            JSONArray jsonArray = new JSONArray(response.getBody());
+            Country country = objectMapper.readValue(jsonArray.get(0).toString(), Country.class);
+            return country;
+        } catch (HttpClientErrorException.NotFound e) {
+            throw new CountryNotFoundException(name);
+        }
     }
 
     @Override
-    public String getMapsByCountry(String country) {
-        ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + country, String.class);
-        JSONArray jsonArr = new JSONArray(response.getBody());
-        JSONObject jsonObj = (JSONObject) jsonArr.get(0);
-        return (String) jsonObj.getJSONObject("maps").get("googleMaps");
+    public String getMapsByCountry(String country) throws CountryNotFoundException, JsonProcessingException {
+        return getCountry(country).getMaps();
     }
 
     @Override
@@ -82,17 +84,17 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public String getCapitalByCountry(String country) throws JsonProcessingException {
+    public String getCapitalByCountry(String country) throws JsonProcessingException, CountryNotFoundException {
         return getCountry(country).getCapital();
     }
 
     @Override
-    public List<String> getCurrencyByCountry(String country) throws  JsonProcessingException {
+    public List<String> getCurrencyByCountry(String country) throws JsonProcessingException, CountryNotFoundException {
         return getCountry(country).getCurrencies();
     }
 
     @Override
-    public String getFlagByCountry(String country) throws JsonProcessingException {
+    public String getFlagByCountry(String country) throws JsonProcessingException, CountryNotFoundException {
         return getCountry(country).getFlag();
     }
 
@@ -136,7 +138,7 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public List<String> getCountryNeighbours(String country) throws JsonProcessingException {
+    public List<String> getCountryNeighbours(String country) throws JsonProcessingException, CountryNotFoundException {
         String acronym = getCountry(country).getAcronym();
         List<Country> allCountries = getAllCountriesDetail();
         return allCountries.stream()
@@ -158,12 +160,12 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public List<String> getLanguageByCountry(String country) throws JsonProcessingException {
+    public List<String> getLanguageByCountry(String country) throws JsonProcessingException, CountryNotFoundException {
         return getCountry(country).getLanguages();
     }
 
     @Override
-    public List<String> getTranslationsByCountry(String country) throws JsonProcessingException {
+    public List<String> getTranslationsByCountry(String country) throws JsonProcessingException, CountryNotFoundException {
         return getCountry(country).getTranslations();
     }
 

@@ -1,7 +1,7 @@
 package com.world.worldproxy.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.world.worldproxy.error.CityNotFound;
+import com.world.worldproxy.exception.CityNotFoundException;
 import com.world.worldproxy.model.City;
 import com.world.worldproxy.service.city.CityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +29,7 @@ public class CityController {
 
     @Operation(description = "Retrieve single city information")
     @GetMapping("/{name}")
-    City getCityDetails(@PathVariable String name) throws JsonProcessingException, CityNotFound {
+    City getCityDetails(@PathVariable String name) throws JsonProcessingException, CityNotFoundException {
         return cityService.getCityDetails(name);
     }
 }
