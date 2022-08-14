@@ -40,16 +40,16 @@ public class CountryController {
     }
 
     @Operation(description = "Get single country by name")
-    @GetMapping("/{name}")
-    Country getCountry(@PathVariable String name) throws JsonProcessingException, CountryNotFoundException {
-        return countryService.getCountry(name);
+    @GetMapping("/{countryName}")
+    Country getCountry(@PathVariable String countryName) throws JsonProcessingException, CountryNotFoundException {
+        return countryService.getCountry(countryName);
     }
 
     @Operation(description = "Get google maps url of the country")
-    @GetMapping("/maps/{country}")
+    @GetMapping("/maps/{countryName}")
     @ResponseBody
-    MapsResponse getMaps(@PathVariable String country) throws CountryNotFoundException, JsonProcessingException {
-        return new MapsResponse(countryService.getMapsByCountry(country));
+    MapsResponse getMaps(@PathVariable String countryName) throws CountryNotFoundException, JsonProcessingException {
+        return new MapsResponse(countryService.getMapsByCountry(countryName));
     }
 
     @Operation(description = "Get all world capitals")
@@ -60,24 +60,24 @@ public class CountryController {
     }
 
     @Operation(description = "Get capital by country name")
-    @GetMapping("/capital/{country}")
+    @GetMapping("/capital/{countryName}")
     @ResponseBody
-    CapitalResponse getCapital(@PathVariable String country) throws JsonProcessingException, CountryNotFoundException {
-        return new CapitalResponse(countryService.getCapitalByCountry(country));
+    CapitalResponse getCapital(@PathVariable String countryName) throws JsonProcessingException, CountryNotFoundException {
+        return new CapitalResponse(countryService.getCapitalByCountry(countryName));
     }
 
     @Operation(description = "Get currency of a country")
-    @GetMapping("/currency/{country}")
+    @GetMapping("/currency/{countryName}")
     @ResponseBody
-    CurrencyResponse getCurrency(@PathVariable String country) throws JsonProcessingException, CountryNotFoundException {
-        return new CurrencyResponse(countryService.getCurrencyByCountry(country));
+    CurrencyResponse getCurrency(@PathVariable String countryName) throws JsonProcessingException, CountryNotFoundException {
+        return new CurrencyResponse(countryService.getCurrencyByCountry(countryName));
     }
 
     @Operation(description = "Get flag of a country")
-    @GetMapping("/flag/{country}")
+    @GetMapping("/flag/{countryName}")
     @ResponseBody
-    FlagResponse getFlag(@PathVariable String country) throws JsonProcessingException, CountryNotFoundException {
-        return new FlagResponse(countryService.getFlagByCountry(country));
+    FlagResponse getFlag(@PathVariable String countryName) throws JsonProcessingException, CountryNotFoundException {
+        return new FlagResponse(countryService.getFlagByCountry(countryName));
     }
 
     @Operation(description = "Get countries by population range")
@@ -97,27 +97,27 @@ public class CountryController {
     }
 
     @Operation(description = "Get countries by continent")
-    @GetMapping("/in/{continent}")
-    List<Country> getCountriesByContinent(@PathVariable String continent) throws JsonProcessingException {
-        return countryService.getCountriesByContinent(continent);
+    @GetMapping("/in/{continentName}")
+    List<Country> getCountriesByContinent(@PathVariable String continentName) throws JsonProcessingException {
+        return countryService.getCountriesByContinent(continentName);
     }
 
     @Operation(description = "Get neighbours of a country")
-    @GetMapping("/neighbours/{country}")
-    List<Country> getNeighbours(@PathVariable String country) throws JsonProcessingException, CountryNotFoundException {
-        return countryService.getCountryNeighbours(country);
+    @GetMapping("/neighbours/{countryName}")
+    List<Country> getNeighbours(@PathVariable String countryName) throws JsonProcessingException, CountryNotFoundException {
+        return countryService.getCountryNeighbours(countryName);
     }
 
     @Operation(description = "Get language (or languages) of a country")
-    @GetMapping("/language/{country}")
-    LanguageResponse getLanguage(@PathVariable String country) throws JsonProcessingException, CountryNotFoundException {
-        return new LanguageResponse(countryService.getLanguageByCountry(country));
+    @GetMapping("/language/{countryName}")
+    LanguageResponse getLanguage(@PathVariable String countryName) throws JsonProcessingException, CountryNotFoundException {
+        return new LanguageResponse(countryService.getLanguageByCountry(countryName));
     }
 
     @Operation(description = "Get translations of a country name")
-    @GetMapping("/translation/{country}")
-    TranslationResponse getTranslations(@PathVariable String country) throws JsonProcessingException, CountryNotFoundException {
-        return new TranslationResponse(countryService.getTranslationsByCountry(country));
+    @GetMapping("/translation/{countryName}")
+    TranslationResponse getTranslations(@PathVariable String countryName) throws JsonProcessingException, CountryNotFoundException {
+        return new TranslationResponse(countryService.getTranslationsByCountry(countryName));
     }
 
     @Operation(description = "Get countries by spoken language")

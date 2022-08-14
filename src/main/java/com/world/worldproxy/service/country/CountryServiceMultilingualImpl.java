@@ -64,31 +64,30 @@ public class CountryServiceMultilingualImpl implements CountryService {
     }
 
     @Override
-    public Country getCountry(String name) throws JsonProcessingException, CountryNotFoundException {
+    public Country getCountry(String countryName) throws JsonProcessingException, CountryNotFoundException {
         try {
-            name = languageNormalizer.normalizeToEnglish(name);
-            ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + name, String.class);
+            String countryNameEnglish = languageNormalizer.normalizeToEnglish(countryName);
+            ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + countryNameEnglish, String.class);
             JSONArray jsonArray = new JSONArray(response.getBody());
             Country country = objectMapper.readValue(jsonArray.get(0).toString(), Country.class);
             return country;
         } catch (HttpClientErrorException.NotFound e) {
-            throw new CountryNotFoundException(name);
+            throw new CountryNotFoundException(countryName);
         }
 
     }
 
     @Override
-    public String getMapsByCountry(String country) throws CountryNotFoundException, JsonProcessingException {
-        country = languageNormalizer.normalizeToEnglish(country);
-        return getCountry(country).getMaps();
+    public String getMapsByCountry(String countryName) throws CountryNotFoundException, JsonProcessingException {
+        return getCountry(countryName).getMaps();
     }
 
     @Override
-    public List<String> getAllCapitals(String continent) throws JsonProcessingException {
-        return continent != null ?
+    public List<String> getAllCapitals(String continentName) throws JsonProcessingException {
+        return continentName != null ?
 
                 getAllCountriesDetail().stream()
-                        .filter(country -> country.getContinents().contains(WordUtils.capitalizeFully(continent)))
+                        .filter(country -> country.getContinents().contains(WordUtils.capitalizeFully(continentName)))
                         .map(Country::getCapital)
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList()) :
@@ -100,24 +99,24 @@ public class CountryServiceMultilingualImpl implements CountryService {
     }
 
     @Override
-    public String getCapitalByCountry(String country) throws JsonProcessingException, CountryNotFoundException {
-        return getCountry(country).getCapital();
+    public String getCapitalByCountry(String countryName) throws JsonProcessingException, CountryNotFoundException {
+        return getCountry(countryName).getCapital();
     }
 
     @Override
-    public List<String> getCurrencyByCountry(String country) throws JsonProcessingException, CountryNotFoundException {
-        return getCountry(country).getCurrencies();
+    public List<String> getCurrencyByCountry(String countryName) throws JsonProcessingException, CountryNotFoundException {
+        return getCountry(countryName).getCurrencies();
     }
 
     @Override
-    public String getFlagByCountry(String country) throws JsonProcessingException, CountryNotFoundException {
-        return getCountry(country).getFlag();
+    public String getFlagByCountry(String countryName) throws JsonProcessingException, CountryNotFoundException {
+        return getCountry(countryName).getFlag();
     }
 
     @Override
-    public List<String> getCountriesByContinent(String continent) throws JsonProcessingException {
+    public List<String> getCountriesByContinent(String continentname) throws JsonProcessingException {
         return getAllCountriesDetail().stream()
-                .filter(country -> country.getContinents().contains(WordUtils.capitalizeFully(continent)))
+                .filter(country -> country.getContinents().contains(WordUtils.capitalizeFully(continentname)))
                 .map(Country::getName)
                 .collect(Collectors.toList());
     }
@@ -154,8 +153,8 @@ public class CountryServiceMultilingualImpl implements CountryService {
     }
 
     @Override
-    public List<String> getCountryNeighbours(String country) throws JsonProcessingException, CountryNotFoundException {
-        String acronym = getCountry(country).getAcronym();
+    public List<String> getCountryNeighbours(String countryName) throws JsonProcessingException, CountryNotFoundException {
+        String acronym = getCountry(countryName).getAcronym();
         List<Country> allCountries = getAllCountriesDetail();
         return allCountries.stream()
                 .filter(c -> Objects.nonNull(c.getBorders()))
@@ -176,13 +175,13 @@ public class CountryServiceMultilingualImpl implements CountryService {
     }
 
     @Override
-    public List<String> getLanguageByCountry(String country) throws JsonProcessingException, CountryNotFoundException {
-        return getCountry(country).getLanguages();
+    public List<String> getLanguageByCountry(String countryName) throws JsonProcessingException, CountryNotFoundException {
+        return getCountry(countryName).getLanguages();
     }
 
     @Override
-    public List<String> getTranslationsByCountry(String country) throws JsonProcessingException, CountryNotFoundException {
-        return getCountry(country).getTranslations();
+    public List<String> getTranslationsByCountry(String countryName) throws JsonProcessingException, CountryNotFoundException {
+        return getCountry(countryName).getTranslations();
     }
 
     @Override

@@ -22,14 +22,14 @@ public class CityController {
     }
 
     @Operation(description = "Retrieve all cities of a country")
-    @GetMapping("/in/{country}")
-    List<String> getCities(@PathVariable String country, @RequestParam(required = false) String startWith) throws JsonProcessingException {
-        return cityService.getCities(country, startWith);
+    @GetMapping("/in/{countryName}")
+    List<String> getCities(@PathVariable String countryName, @RequestParam(required = false) String startWith) throws JsonProcessingException {
+        return cityService.getCities(countryName, startWith);
     }
 
     @Operation(description = "Retrieve single city information")
-    @GetMapping("/{name}")
-    City getCityDetails(@PathVariable String name) throws JsonProcessingException, CityNotFoundException {
-        return cityService.getCityDetails(name);
+    @GetMapping("/{cityName}")
+    City getCityDetails(@PathVariable String cityName) throws JsonProcessingException, CityNotFoundException {
+        return cityService.getCityDetails(cityName);
     }
 }

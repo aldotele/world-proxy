@@ -40,8 +40,8 @@ public class CityServiceImpl implements CityService {
 
 
     @Override
-    public List<String> getCities(String country, String startWith) throws JsonProcessingException {
-        ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + "q?country=" + country, String.class);
+    public List<String> getCities(String countryName, String startWith) throws JsonProcessingException {
+        ResponseEntity<String> response = restTemplate.getForEntity(countryCityBaseUrl + "/" + "q?country=" + countryName, String.class);
         CountryCitiesExternalResponse externalResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
         List<String> allCountryCities = externalResponse.getData();
         return startWith != null ? allCountryCities.stream()
@@ -50,10 +50,10 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public City getCityDetails(String name) throws JsonProcessingException, CityNotFoundException {
+    public City getCityDetails(String cityName) throws JsonProcessingException, CityNotFoundException {
         HttpEntity<String> apiKeyRequest = ApiKeyRequest.buildRequest(apiNinjaApiKey);
 
-        ResponseEntity<String> response = restTemplate.exchange(apiNinjaCityBaseUrl + "?name=" + name,
+        ResponseEntity<String> response = restTemplate.exchange(apiNinjaCityBaseUrl + "?name=" + cityName,
                 HttpMethod.GET,
                 apiKeyRequest,
                 String.class);
@@ -63,7 +63,7 @@ public class CityServiceImpl implements CityService {
             City city = objectMapper.readValue(jsonArray.get(0).toString(), City.class);
             return city;
         } else {
-            throw new CityNotFoundException(name);
+            throw new CityNotFoundException(cityName);
         }
     }
 }
