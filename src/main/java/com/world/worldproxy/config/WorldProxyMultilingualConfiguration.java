@@ -2,9 +2,7 @@ package com.world.worldproxy.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.world.worldproxy.WorldProxyApplication;
 import com.world.worldproxy.service.multilingual.LanguageNormalizer;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +42,6 @@ public class WorldProxyMultilingualConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(value = "spring.profiles.active", havingValue = WorldProxyApplication.MULTILINGUAL)
     public LanguageNormalizer languageConverter() {
         return new LanguageNormalizer();
     }
