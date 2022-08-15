@@ -2,10 +2,7 @@ package com.world.worldproxy.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.world.worldproxy.WorldProxyApplication;
-import com.world.worldproxy.service.multilingual.LanguageNormalizer;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -43,12 +40,6 @@ public class WorldProxyConfiguration {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper;
-    }
-
-    @Bean
-    @ConditionalOnProperty(value = "spring.profiles.active", havingValue = WorldProxyApplication.MULTILINGUAL)
-    public LanguageNormalizer languageConverter() {
-        return new LanguageNormalizer();
     }
 
 }
