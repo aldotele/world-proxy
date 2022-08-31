@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @Configuration
@@ -18,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan("com.world.worldproxy.service")
 @EnableWebMvc
 @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
-public class WorldProxyConfiguration {
+public class WorldProxyConfiguration implements WebMvcConfigurer {
 
     @Bean
     public RestTemplate restTemplate() {
@@ -40,6 +42,11 @@ public class WorldProxyConfiguration {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper;
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
     }
 
 }
