@@ -23,6 +23,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(path = "country")
+@CrossOrigin(origins = "*")
 public class CountryController {
 
     @Autowired

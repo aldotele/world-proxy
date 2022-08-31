@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "city")
+@CrossOrigin(origins = "*")
 public class CityController {
 
     @Autowired
