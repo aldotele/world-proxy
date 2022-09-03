@@ -14,7 +14,7 @@
 <br/>
 
 ### Intro
-The service works as an aggregator of world countries and cities
+The service acts as an aggregator of world countries and cities
 information by exposing a series of APIs and proxying requests to
 external endpoints such as [restcountries.com](https://restcountries.com/)
 
