@@ -108,4 +108,12 @@
 		</plugins>
 	</build>
 
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>World Proxy Application</name>
+			<url>https://maven.pkg.github.com/aldotele/world-proxy</url>
+		</repository>
+	</distributionManagement>
+
 </project>
