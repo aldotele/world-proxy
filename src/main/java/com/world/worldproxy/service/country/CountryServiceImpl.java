@@ -111,7 +111,7 @@ public class CountryServiceImpl implements CountryService {
         // both min and max provided
         if (minimum != null & maximum != null) {
             if (minimum.compareTo(maximum) > 0) {
-                throw new QueryParameterException("population range is not valid.");
+                throw new QueryParameterException("population range not valid: maximum cannot be less than minimum.");
             }
             return allCountries.stream()
                     .filter(country -> country.getPopulation().compareTo(minimum) > 0 & country.getPopulation().compareTo(maximum) < 0)
