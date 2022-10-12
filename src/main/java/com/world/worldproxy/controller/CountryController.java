@@ -94,6 +94,7 @@ public class CountryController {
                 throw new QueryParameterException("error with query parameter " + nextParam + ": not allowed");
             }
         }
+
         return countryService.getCountriesByPopulationRange(minPopulation, maxPopulation);
     }
 
