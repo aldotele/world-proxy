@@ -1,26 +1,37 @@
 package com.world.worldproxy.controller;
 
+import java.math.BigDecimal;
+import java.util.Enumeration;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.world.worldproxy.exception.CountryNotFoundException;
 import com.world.worldproxy.exception.QueryParameterException;
 import com.world.worldproxy.model.Country;
-import com.world.worldproxy.model.response.*;
+import com.world.worldproxy.model.response.CapitalResponse;
+import com.world.worldproxy.model.response.CurrencyResponse;
+import com.world.worldproxy.model.response.FlagResponse;
+import com.world.worldproxy.model.response.LanguageResponse;
+import com.world.worldproxy.model.response.MapsResponse;
+import com.world.worldproxy.model.response.TranslationResponse;
 import com.world.worldproxy.service.country.CountryService;
+
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
-import java.util.Enumeration;
-import java.util.List;
 
 
-@Slf4j
 @RestController
 @RequestMapping(path = "country")
 @CrossOrigin(origins = "*")
