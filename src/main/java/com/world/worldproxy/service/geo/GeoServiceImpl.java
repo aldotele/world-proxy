@@ -36,11 +36,8 @@ public class GeoServiceImpl implements GeoService {
                 apiHereBaseUrl, latitude, longitude, LAKE_CATEGORIES, apiHereApiKey);
 
         ResponseEntity<String> response = restTemplate.getForEntity(urlForLakes, String.class);
-
         LakeExternalResponse externalResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
         List<Lake> lakes = externalResponse.getItems();
-
-//        List<Lake> lakes = Arrays.asList(objectMapper.readValue(response.getBody(), Lake[].class));
 
         return lakes;
     }
