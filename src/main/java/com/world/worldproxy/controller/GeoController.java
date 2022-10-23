@@ -27,7 +27,7 @@ public class GeoController {
         return geoService.getLakes(latitude, longitude);
     }
 
-    @GetMapping("river")
+    @GetMapping("/river")
     List<River> getRiver(@RequestParam String latitude, @RequestParam String longitude) throws JsonProcessingException {
         return geoService.getRivers(latitude, longitude);
     }
