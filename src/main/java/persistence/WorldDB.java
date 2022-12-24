@@ -1,72 +1,81 @@
 package persistence;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.MongoCredential;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Projections;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Slf4j
 public class WorldDB {
-    static MongoClient db;
+    static String DB_NAME = "world";
+    static MongoClient mongoClient;
+    static MongoDatabase database;
+
     static {
-        db = new MongoClient("localhost", 27017);
+        mongoClient = new MongoClient("localhost", 27017);
+        database = mongoClient.getDatabase(DB_NAME);
     }
 
-    public static void establishConnections() {
-        try {
-            MongoCredential credential;
-            credential = MongoCredential.createCredential("wpuser", "world", "wppassword".toCharArray());
-            System.out.println("Successfully Connected" + " to the database");
-
-            MongoDatabase database = db.getDatabase("world");
-            //System.out.println("Credentials are: "+ credential);
-        } catch (Exception e) {System.out.println("Connection establishment failed");
-            System.out.println(e);
-        }
-    }
-
-    public static void createCollection(String collectionName) {
-        try {
-            // establishConnections() Code
-            // is defined above
-            establishConnections();
-
-            // Get the database instance
-            MongoDatabase database = db.getDatabase("world");
-
-            // Create the collection
-            database.createCollection(collectionName);
-            System.out.println("Collection " + collectionName + " created Successfully");
-        }
-        catch (Exception e) {
-            System.out.println("Collection creation failed");
-            System.out.println(e);
-        }
-    }
-
-    public static <T> void writeManyToCollection(String dbName, String collectionName, List<T> countries) {
-        MongoDatabase database = db.getDatabase(dbName);
+    public static <T> void writeManyToCollection(String collectionName, List<T> objects) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         List<Document> documents = new ArrayList<>();
         Gson gson = new Gson();
-        countries.forEach(country -> {
-            documents.add(Document.parse(gson.toJson(country)));
+        objects.forEach(obj -> {
+            documents.add(Document.parse(gson.toJson(obj)));
             // ALTERNATIVE USING OBJECT MAPPER
-//            try {
-//                documents.add(Document.parse(objectMapper.writeValueAsString(country)));
-//            } catch (JsonProcessingException e) {
-//                throw new RuntimeException(e);
-//            }
+            /*
+            try {
+                documents.add(Document.parse(objectMapper.writeValueAsString(country)));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            */
         });
         collection.insertMany(documents);
     }
 
+    public static void createCollection(String collectionName) {
+        try {
+            // if the collection exists, clean it to start fresh
+            database.getCollection(collectionName).drop();
+            database.createCollection(collectionName);
+            log.info("Collection " + collectionName + " created successfully");
+        }
+        catch (Exception e) {
+            log.error("Failed at creating collection " + collectionName);
+            log.error(e.getMessage());
+        }
+    }
+
+    public static String retrieveAll(String collectionName) throws JsonProcessingException {
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        ArrayList<String> allCountries = collection.find().projection(Projections.excludeId())
+                .map(Document::toJson)
+                .into(new ArrayList<>());
+        return allCountries.toString();
+    }
+
+    public static String retrieveCountry(String countryName) {
+        MongoCollection<Document> collection = database.getCollection("countries");
+        String countryNameCapitalized = countryName.substring(0, 1).toUpperCase() +
+                countryName.substring(1).toLowerCase();
+        // retrieving the country from whatever language
+        Document document = collection.find(new BasicDBObject("translations", countryNameCapitalized))
+                .projection(Projections.excludeId()).first();
+        if (document != null) {
+            return document.toJson();
+        }
+        return "country " + countryName + " not found.";
+    }
+
     public static void main(String[] args) {
-        //createCollection("sample");
     }
 }

@@ -13,9 +13,8 @@ public class World {
     public static void main(String[] args) throws IOException {
         if (IS_MULTILINGUAL) {
             MultilingualRunner.init();
-            WorldDB.establishConnections();
             WorldDB.createCollection("countries");
-            WorldDB.writeManyToCollection("world", "countries", MultilingualRunner.allCountries);
+            WorldDB.writeManyToCollection("countries", MultilingualRunner.allCountries);
         }
 
 

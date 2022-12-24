@@ -5,13 +5,14 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 import static configuration.Configuration.objectMapper;
 import static util.Routes.REST_COUNTRIES_BASE_URL;
 
 public class MultilingualRunner {
-    public static final Map<String, String> translationMap = new HashMap<>();
     public static List<Country> allCountries;
 
     static void storeAllCountries() throws IOException {
@@ -20,15 +21,7 @@ public class MultilingualRunner {
         allCountries = Arrays.asList(objectMapper.readValue(Objects.requireNonNull(response.body()).string(), Country[].class));
     }
 
-    static void buildTranslationMap() {
-        allCountries
-                .forEach(country -> country.getTranslations().stream()
-                        .distinct()
-                        .forEach(translation -> translationMap.putIfAbsent(translation.toLowerCase(), country.getName())));
-    }
-
     public static void init() throws IOException {
         storeAllCountries();
-        buildTranslationMap();
     }
 }
