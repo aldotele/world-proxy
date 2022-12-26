@@ -3,10 +3,12 @@ package controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.javalin.http.Handler;
 import model.City;
+import model.Country;
 import model.external.CountryCitiesExternalResponse;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
+import persistence.WorldDB;
 import util.SimpleClient;
 
 import java.util.List;
@@ -14,7 +16,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import static configuration.Configuration.*;
-import static util.MultilingualRunner.translationMap;
 import static util.Routes.API_NINJA_BASE_URL;
 import static util.Routes.COUNTRIESNOW_BASE_URL;
 import static util.TranslationHandler.ENGLISH;
@@ -23,11 +24,11 @@ import static util.TranslationHandler.translateTo;
 public class CityController {
 
     public static Handler fetchCitiesByCountry = ctx -> {
-        String incoming = ctx.pathParam("country");
-        String countryName = IS_MULTILINGUAL ? translationMap.get(incoming.toLowerCase()) : incoming;
-        Request request = SimpleClient.buildRequest(COUNTRIESNOW_BASE_URL + "/q?country=" + countryName);
+        String countryName = ctx.pathParam("country");
+        Country country = WorldDB.retrieveCountry(countryName);
+        Request request = SimpleClient.buildRequest(COUNTRIESNOW_BASE_URL + "/q?country=" + country.getName());
         Response response = SimpleClient.makeRequest(request);
-        CountryCitiesExternalResponse mappedResponse = objectMapper
+        CountryCitiesExternalResponse mappedResponse = simpleMapper
                 .readValue(Objects.requireNonNull(response.body()).string(), new TypeReference<>(){});
         List<String> countryCities = mappedResponse.getData();
         ctx.json(countryCities);
@@ -43,7 +44,7 @@ public class CityController {
         JSONArray jsonArray = new JSONArray(Objects.requireNonNull(response.body()).string());
 
         if (jsonArray.length() > 0) {
-            City city = objectMapper.readValue(jsonArray.get(0).toString(), City.class);
+            City city = mapper.readValue(jsonArray.get(0).toString(), City.class);
             ctx.json(city);
         } else {
             throw new Exception();

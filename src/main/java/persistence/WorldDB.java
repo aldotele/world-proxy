@@ -1,17 +1,22 @@
 package persistence;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
+import exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import model.Country;
 import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static configuration.Configuration.simpleMapper;
 
 @Slf4j
 public class WorldDB {
@@ -55,15 +60,16 @@ public class WorldDB {
         }
     }
 
-    public static String retrieveAll(String collectionName) throws JsonProcessingException {
+    public static List<Country> retrieveAll(String collectionName) throws JsonProcessingException {
         MongoCollection<Document> collection = database.getCollection(collectionName);
-        ArrayList<String> allCountries = collection.find().projection(Projections.excludeId())
+        ArrayList<String> found = collection.find().projection(Projections.excludeId())
                 .map(Document::toJson)
                 .into(new ArrayList<>());
-        return allCountries.toString();
+        List<Country> allCountries = simpleMapper.readValue(found.toString(), new TypeReference<>(){});
+        return allCountries;
     }
 
-    public static String retrieveCountry(String countryName) {
+    public static Country retrieveCountry(String countryName) throws JsonProcessingException, NotFoundException {
         MongoCollection<Document> collection = database.getCollection("countries");
         String countryNameCapitalized = countryName.substring(0, 1).toUpperCase() +
                 countryName.substring(1).toLowerCase();
@@ -71,9 +77,21 @@ public class WorldDB {
         Document document = collection.find(new BasicDBObject("translations", countryNameCapitalized))
                 .projection(Projections.excludeId()).first();
         if (document != null) {
-            return document.toJson();
+            Country country = simpleMapper.readValue(document.toJson(), Country.class);
+            return country;
         }
-        return "country " + countryName + " not found.";
+        throw new NotFoundException(countryName);
+    }
+
+    public static String retrieveEnglishCountryName(String countryName) {
+        MongoCollection<Document> collection = database.getCollection("countries");
+        String countryNameCapitalized = countryName.substring(0, 1).toUpperCase() +
+                countryName.substring(1).toLowerCase();
+        Document document = collection.find(new BasicDBObject("translations", countryNameCapitalized)).first();
+        if (document != null) {
+            return document.get("name").toString();
+        }
+        return null;
     }
 
     public static void main(String[] args) {

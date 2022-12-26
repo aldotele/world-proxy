@@ -1,5 +1,6 @@
 import controller.CityController;
 import controller.CountryController;
+import exception.NotFoundException;
 import io.javalin.Javalin;
 import io.javalin.plugin.bundled.CorsPluginConfig;
 import persistence.WorldDB;
@@ -17,9 +18,14 @@ public class World {
             WorldDB.writeManyToCollection("countries", MultilingualRunner.allCountries);
         }
 
-
         var app = Javalin.create(config -> config.plugins.enableCors(cors -> cors.add(CorsPluginConfig::anyHost)))
                 .start(7070);
+
+        // Exception Handler
+        app.exception(NotFoundException.class, (e, ctx) -> {
+            ctx.status(400);
+            ctx.json(e.getMessage());
+        });
 
         // WELCOME
         app.get("/", context -> context.result("Welcome to World proxy"));

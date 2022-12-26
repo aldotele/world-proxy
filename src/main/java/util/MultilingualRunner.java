@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static configuration.Configuration.objectMapper;
+import static configuration.Configuration.mapper;
 import static util.Routes.REST_COUNTRIES_BASE_URL;
 
 public class MultilingualRunner {
@@ -18,7 +18,7 @@ public class MultilingualRunner {
     static void storeAllCountries() throws IOException {
         Request request = SimpleClient.buildRequest(REST_COUNTRIES_BASE_URL + "/all");
         Response response = SimpleClient.makeRequest(request);
-        allCountries = Arrays.asList(objectMapper.readValue(Objects.requireNonNull(response.body()).string(), Country[].class));
+        allCountries = Arrays.asList(mapper.readValue(Objects.requireNonNull(response.body()).string(), Country[].class));
     }
 
     public static void init() throws IOException {
