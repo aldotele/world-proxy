@@ -69,6 +69,10 @@ public class WorldDB {
         return allCountries;
     }
 
+    public static List<Country> retrieveCountriesByPopulationRange(int minPopulation, int maxPopulation) {
+        return null; // TODO
+    }
+
     public static Country retrieveCountry(String countryName) throws JsonProcessingException, NotFoundException {
         MongoCollection<Document> collection = database.getCollection("countries");
         String countryNameCapitalized = countryName.substring(0, 1).toUpperCase() +
