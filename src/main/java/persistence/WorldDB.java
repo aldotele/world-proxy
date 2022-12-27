@@ -3,6 +3,7 @@ package persistence;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.gson.Gson;
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -69,8 +70,38 @@ public class WorldDB {
         return allCountries;
     }
 
-    public static List<Country> retrieveCountriesByPopulationRange(int minPopulation, int maxPopulation) {
-        return null; // TODO
+    public static List<Country> retrieveCountriesByPopulationRange(Integer minPopulation, Integer maxPopulation) throws JsonProcessingException {
+        MongoCollection<Document> collection = database.getCollection("countries");
+        // db.countries.find({$and: [{"population": {$gt: 20000000}}, {"population": {$lt: 50000000}}]}, {name: 1, _id: 0})
+        String queryResult = "";
+        if (minPopulation != null && maxPopulation != null) {
+            BasicDBList conditions = new BasicDBList();
+            conditions.add(new BasicDBObject("population", new BasicDBObject("$lt", maxPopulation)));
+            conditions.add(new BasicDBObject("population", new BasicDBObject("$gt", minPopulation)));
+            queryResult = collection.find(new BasicDBObject("$and", conditions))
+                    .projection(Projections.excludeId())
+                    .map(Document::toJson)
+                    .into(new ArrayList<>())
+                    .toString();
+        }
+        else if (minPopulation != null) {
+            queryResult = collection.find(new BasicDBObject("$and", new BasicDBList().add(
+                            new BasicDBObject("population", new BasicDBObject("$gt", minPopulation)))))
+                    .projection(Projections.excludeId())
+                    .map(Document::toJson)
+                    .into(new ArrayList<>())
+                    .toString();;
+        }
+        else {
+            queryResult = collection.find(new BasicDBObject("$and", new BasicDBList().add(
+                            new BasicDBObject("population", new BasicDBObject("$lt", maxPopulation)))))
+                    .projection(Projections.excludeId())
+                    .map(Document::toJson)
+                    .into(new ArrayList<>())
+                    .toString();
+        }
+        List<Country> allCountries = simpleMapper.readValue(queryResult, new TypeReference<>(){});
+        return allCountries;
     }
 
     public static Country retrieveCountry(String countryName) throws JsonProcessingException, NotFoundException {
@@ -98,6 +129,6 @@ public class WorldDB {
         return null;
     }
 
-    public static void main(String[] args) {
+   public static void main(String[] args) {
     }
 }

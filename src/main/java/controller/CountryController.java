@@ -5,22 +5,21 @@ import model.Country;
 import persistence.WorldDB;
 
 import java.util.List;
+import java.util.Map;
 
 public class CountryController {
 
     public static Handler fetchAllCountries = ctx -> {
+        Map<String, List<String>> stringListMap = ctx.queryParamMap();
         String minPopulation = ctx.queryParam("minPopulation");
         String maxPopulation = ctx.queryParam("maxPopulation");
+        List<Country> countries;
         if (minPopulation != null && maxPopulation != null) {
-            // TODO query
-        } else if (minPopulation != null && maxPopulation == null) {
-            // TODO query
-        } else if (maxPopulation != null && minPopulation == null) {
-
+            countries = WorldDB.retrieveCountriesByPopulationRange(Integer.valueOf(minPopulation), Integer.valueOf(maxPopulation));
         } else {
-            List<Country> countries = WorldDB.retrieveAll("countries");
-            ctx.json(countries);
+            countries = WorldDB.retrieveAll("countries");
         }
+        ctx.json(countries);
     };
 
     public static Handler fetchCountryByName = ctx -> {
