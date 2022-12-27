@@ -9,8 +9,18 @@ import java.util.List;
 public class CountryController {
 
     public static Handler fetchAllCountries = ctx -> {
-        List<Country> countries = WorldDB.retrieveAll("countries");
-        ctx.json(countries);
+        String minPopulation = ctx.queryParam("minPopulation");
+        String maxPopulation = ctx.queryParam("maxPopulation");
+        if (minPopulation != null && maxPopulation != null) {
+            // TODO query
+        } else if (minPopulation != null && maxPopulation == null) {
+            // TODO query
+        } else if (maxPopulation != null && minPopulation == null) {
+
+        } else {
+            List<Country> countries = WorldDB.retrieveAll("countries");
+            ctx.json(countries);
+        }
     };
 
     public static Handler fetchCountryByName = ctx -> {
