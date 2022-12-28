@@ -18,8 +18,6 @@ import java.util.Objects;
 import static configuration.Configuration.*;
 import static util.Routes.API_NINJA_BASE_URL;
 import static util.Routes.COUNTRIESNOW_BASE_URL;
-import static util.TranslationHandler.ENGLISH;
-import static util.TranslationHandler.translateTo;
 
 public class CityController {
 
@@ -37,7 +35,7 @@ public class CityController {
     public static Handler fetchCityByName = ctx -> {
         String apiKey = ENV.get("NINJA_API_KEY");
         Map<String, String> headers = Map.of("x-api-key", Objects.requireNonNull(apiKey));
-        String cityName = translateTo(ctx.pathParam("name"), ENGLISH);
+        String cityName = ctx.pathParam("name");
         String url = API_NINJA_BASE_URL + "?name=" + cityName;
         Request request = SimpleClient.buildRequest(url, headers);
         Response response = SimpleClient.makeRequest(request);

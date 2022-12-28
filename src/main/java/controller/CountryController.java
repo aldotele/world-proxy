@@ -5,12 +5,10 @@ import model.Country;
 import persistence.WorldDB;
 
 import java.util.List;
-import java.util.Map;
 
 public class CountryController {
 
     public static Handler fetchAllCountries = ctx -> {
-        Map<String, List<String>> stringListMap = ctx.queryParamMap();
         String minPopulation = ctx.queryParam("minPopulation");
         String maxPopulation = ctx.queryParam("maxPopulation");
         List<Country> countries;

@@ -4,24 +4,16 @@ services:
   mongodb:
     image: mongo:4.2.3
     container_name: mongodb
-    expose:
-      - 27017
     ports:
       - 27017:27017
-    restart: always
 
   javalin_app:
     build: .
     container_name: javalin_app
     ports:
       - 7070:7070
+    environment:
+      MONGO_HOST: mongodb
     depends_on:
       mongodb:
         condition: service_started
-
-volumes:
-  data: {}
-
-networks:
-  default:
-    name: mongodb_network

@@ -2,6 +2,7 @@ package persistence;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.gson.Gson;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -10,16 +11,26 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
 
+import configuration.Configuration;
 import exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import model.Country;
+import okhttp3.Request;
+import okhttp3.Response;
+import util.Routes;
+import util.SimpleClient;
+
 import org.bson.Document;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static configuration.Configuration.simpleMapper;
+import static configuration.Configuration.mapper;
 import static configuration.Configuration.ENV;
 
 @Slf4j
@@ -29,8 +40,17 @@ public class WorldDB {
     static MongoDatabase database;
 
     static {
-        mongoClient = new MongoClient(Optional.ofNullable(ENV.get("DB_HOST")).orElse("localhost"), 27017);
+        // when launching docker compose, db host will be mongo, otherwise localhost
+        mongoClient = new MongoClient(Optional.ofNullable(ENV.get("MONGO_HOST")).orElse("localhost"), 27017);
         database = mongoClient.getDatabase(DB_NAME);
+    }
+
+    public static void init() throws JsonMappingException, JsonProcessingException, IOException {
+        Request request = SimpleClient.buildRequest(Routes.REST_COUNTRIES_BASE_URL + "/all");
+        Response response = SimpleClient.makeRequest(request);
+        List<Country> allCountries = Arrays.asList(mapper.readValue(Objects.requireNonNull(response.body()).string(), Country[].class));
+        WorldDB.createCollection("countries");
+        WorldDB.writeManyToCollection("countries", allCountries);
     }
 
     public static <T> void writeManyToCollection(String collectionName, List<T> objects) {
@@ -134,4 +154,5 @@ public class WorldDB {
 
    public static void main(String[] args) {
     }
+
 }
