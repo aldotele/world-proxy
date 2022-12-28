@@ -9,6 +9,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
+
 import exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import model.Country;
@@ -16,8 +17,10 @@ import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static configuration.Configuration.simpleMapper;
+import static configuration.Configuration.ENV;
 
 @Slf4j
 public class WorldDB {
@@ -26,7 +29,7 @@ public class WorldDB {
     static MongoDatabase database;
 
     static {
-        mongoClient = new MongoClient("localhost", 27017);
+        mongoClient = new MongoClient(Optional.ofNullable(ENV.get("DB_HOST")).orElse("localhost"), 27017);
         database = mongoClient.getDatabase(DB_NAME);
     }
 

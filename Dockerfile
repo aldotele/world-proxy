@@ -10,4 +10,3 @@ WORKDIR /project
 RUN mvn clean package -DskipTests
 # launch the jar
 CMD ["java", "-jar", "target/world.jar"]
-EXPOSE 7000
