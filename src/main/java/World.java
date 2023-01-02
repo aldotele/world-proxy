@@ -31,6 +31,9 @@ public class World {
         // COUNTRY BY NAME
         app.get("/country/{name}", CountryController.fetchCountryByName);
 
+        //  COUNTRY FILTERS
+        app.post("/country/search", CountryController.fetchCountries);
+
         // ALL CITIES BY COUNTRY
         app.get("/city/in/{country}", CityController.fetchCitiesByCountry);
 

@@ -1,7 +1,9 @@
 package controller;
 
+import configuration.Configuration;
 import io.javalin.http.Handler;
 import model.Country;
+import model.CountrySearch;
 import persistence.WorldDB;
 
 import java.util.List;
@@ -9,14 +11,7 @@ import java.util.List;
 public class CountryController {
 
     public static Handler fetchAllCountries = ctx -> {
-        String minPopulation = ctx.queryParam("minPopulation");
-        String maxPopulation = ctx.queryParam("maxPopulation");
-        List<Country> countries;
-        if (minPopulation != null && maxPopulation != null) {
-            countries = WorldDB.retrieveCountriesByPopulationRange(Integer.valueOf(minPopulation), Integer.valueOf(maxPopulation));
-        } else {
-            countries = WorldDB.retrieveAll("countries");
-        }
+        List<Country> countries = WorldDB.retrieveAll("countries");
         ctx.json(countries);
     };
 
@@ -24,5 +19,12 @@ public class CountryController {
         String name = ctx.pathParam("name");
         Country country = WorldDB.retrieveCountry(name);
         ctx.json(country);
+    };
+
+    public static Handler fetchCountries = ctx -> {
+      String body = ctx.body();
+      CountrySearch search = Configuration.simpleMapper.readValue(body, CountrySearch.class);
+      List<Country> filtered = WorldDB.retrieveCountries(search);
+      ctx.json(filtered);
     };
 }
