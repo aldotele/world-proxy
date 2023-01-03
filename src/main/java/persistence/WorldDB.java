@@ -11,6 +11,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
 import exception.NotFoundException;
+import exception.SearchException;
 import lombok.extern.slf4j.Slf4j;
 import model.Country;
 import model.CountrySearch;
@@ -108,7 +109,7 @@ public class WorldDB {
      * @return list of countries
      * @throws JsonProcessingException
      */
-    public static List<Country> retrieveCountries(CountrySearch search) throws JsonProcessingException {
+    public static List<Country> retrieveCountries(CountrySearch search) throws JsonProcessingException, SearchException {
         MongoCollection<Document> collection = database.getCollection("countries");
         BasicDBList conditions = new BasicDBList();
 
@@ -142,6 +143,10 @@ public class WorldDB {
         if (capitalRegex != null) {
             Pattern capitalPattern = Pattern.compile(capitalRegex, Pattern.CASE_INSENSITIVE);
             conditions.add(new BasicDBObject("capital", new BasicDBObject("$regex", capitalPattern)));
+        }
+
+        if (conditions.isEmpty()) {
+            throw new SearchException("at least one valid search criteria is needed.");
         }
 
         String queryResult = collection.find(new BasicDBObject("$and", conditions))

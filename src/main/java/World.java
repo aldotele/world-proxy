@@ -1,11 +1,14 @@
 import controller.CityController;
 import controller.CountryController;
+import exception.ExceptionHandler;
 import exception.NotFoundException;
+import exception.SearchException;
 import io.javalin.Javalin;
 import io.javalin.plugin.bundled.CorsPluginConfig;
 import persistence.WorldDB;
 
 import java.io.IOException;
+import java.util.List;
 
 
 public class World {
@@ -16,11 +19,16 @@ public class World {
         var app = Javalin.create(config -> config.plugins.enableCors(cors -> cors.add(CorsPluginConfig::anyHost)))
                 .start(7070);
 
+        ExceptionHandler badRequestExceptionHandler = new ExceptionHandler(app, NotFoundException.class, SearchException.class);
+        badRequestExceptionHandler.handleExceptions(400);
+
+        List<Class<? extends Exception>> classes = List.of(NotFoundException.class, SearchException.class);
+
         // Exception Handler
-        app.exception(NotFoundException.class, (e, ctx) -> {
-            ctx.status(400);
-            ctx.json(e.getMessage());
-        });
+//        app.exception(NotFoundException.class, (e, ctx) -> {
+//            ctx.status(400);
+//            ctx.json(e.getMessage());
+//        });
 
         // WELCOME
         app.get("/", context -> context.result("Welcome to World proxy"));
