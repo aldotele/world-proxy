@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static configuration.Configuration.*;
+import static util.RegexUtil.exactIgnoreCase;
 
 @Slf4j
 public class WorldDB {
@@ -122,7 +123,9 @@ public class WorldDB {
         // spoken languages
         List<String> languages = search.getLanguages();
         if (languages != null) {
-            for (String language: languages) conditions.add(new BasicDBObject("languages", language));
+            for (String language: languages) {
+                conditions.add(new BasicDBObject("languages", exactIgnoreCase(language)));
+            }
         }
 
         // borders
@@ -171,7 +174,21 @@ public class WorldDB {
         return null;
     }
 
-   public static void main(String[] args) {
+    public static List<String> retrieveLanguages(String collectionName) {
+        MongoCollection<Document> collection = database.getCollection("countries");
+        return collection.distinct("languages", String.class)
+                .into(new ArrayList<>());
     }
 
+    public static List<String> retrieveCurrencies(String collectionName) {
+        MongoCollection<Document> collection = database.getCollection("countries");
+        return collection.distinct("currencies", String.class)
+                .into(new ArrayList<>());
+    }
+
+    public static List<String> retrieveCapitals(String countries) {
+        MongoCollection<Document> collection = database.getCollection("countries");
+        return collection.distinct("capital", String.class)
+                .into(new ArrayList<>());
+    }
 }

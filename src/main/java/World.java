@@ -1,5 +1,6 @@
 import controller.CityController;
 import controller.CountryController;
+import controller.WorldController;
 import exception.NotFoundException;
 import exception.SearchException;
 import io.javalin.Javalin;
@@ -42,6 +43,15 @@ public class World {
 
         // SINGLE CITY DETAILS
         app.get("/city/{name}", CityController.fetchCityByName);
+
+        // WORLD LANGUAGES
+        app.get("/world/languages", WorldController.fetchLanguages);
+
+        // WORLD CURRENCIES
+        app.get("/world/currencies", WorldController.fetchCurrencies);
+
+        // WORLD CAPITALS
+        app.get("/world/capitals", WorldController.fetchCapitals);
     }
 }
 
