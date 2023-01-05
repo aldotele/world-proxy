@@ -11,6 +11,7 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<javalin.version>5.2.0</javalin.version>
+		<javalin.openapi.version>5.3.0-alpha.7</javalin.openapi.version>
 		<jackson.version>2.14.1</jackson.version>
 	</properties>
 
@@ -68,6 +69,19 @@
 			<version>0.2.1</version>
 		</dependency>
 
+		<!-- OpenApi plugin -->
+		<dependency>
+			<groupId>io.javalin.community.openapi</groupId>
+			<artifactId>javalin-openapi-plugin</artifactId>
+			<version>${javalin.openapi.version}</version>
+		</dependency>
+		<!-- Swagger plugin -->
+		<dependency>
+			<groupId>io.javalin.community.openapi</groupId>
+			<artifactId>javalin-swagger-plugin</artifactId>
+			<version>${javalin.openapi.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
@@ -113,6 +127,21 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<annotationProcessorPath>
+							<groupId>io.javalin.community.openapi</groupId>
+							<artifactId>openapi-annotation-processor</artifactId>
+							<version>${javalin.openapi.version}</version>
+						</annotationProcessorPath>
+					</annotationProcessorPaths>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
