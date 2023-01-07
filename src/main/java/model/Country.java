@@ -14,6 +14,7 @@ public class Country implements Serializable {
     private String name;
     private String officialName;
     private String acronym;
+    private String isoCode;
     private String capital;
     private List<String> borders;
     private String maps;
@@ -23,6 +24,11 @@ public class Country implements Serializable {
     private String flag;
     private List<String> languages;
     private List<String> translations;
+
+    @JsonProperty("cca2")
+    private void retrieveIsoCode(String isoCode) {
+        this.isoCode = isoCode;
+    }
 
     @SuppressWarnings("unchecked")
     @JsonProperty("name")
