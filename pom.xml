@@ -43,7 +43,6 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.24</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -147,6 +146,11 @@
 							<groupId>io.javalin.community.openapi</groupId>
 							<artifactId>openapi-annotation-processor</artifactId>
 							<version>${javalin.openapi.version}</version>
+						</annotationProcessorPath>
+						<annotationProcessorPath>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.18.24</version>
 						</annotationProcessorPath>
 					</annotationProcessorPaths>
 				</configuration>
