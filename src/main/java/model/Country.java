@@ -24,6 +24,7 @@ public class Country implements Serializable {
     private String flag;
     private List<String> languages;
     private List<String> translations;
+    private Location location;
 
     @JsonProperty("cca2")
     private void retrieveIsoCode(String isoCode) {

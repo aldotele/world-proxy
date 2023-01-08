@@ -10,6 +10,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
+import com.mongodb.client.result.UpdateResult;
 import exception.NotFoundException;
 import exception.SearchException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +22,11 @@ import org.bson.Document;
 import util.Routes;
 import util.SimpleClient;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -42,11 +46,39 @@ public class WorldDB {
     }
 
     public static void init() throws JsonMappingException, JsonProcessingException, IOException {
+        // retrieving all countries and writing to mongo
         Request request = SimpleClient.buildRequest(Routes.REST_COUNTRIES_BASE_URL + "/all");
         Response response = SimpleClient.makeRequest(request);
         List<Country> allCountries = Arrays.asList(mapper.readValue(Objects.requireNonNull(response.body()).string(), Country[].class));
         WorldDB.createCollection("countries");
         WorldDB.writeManyToCollection("countries", allCountries);
+
+        // retrieving countries coordinates and updating mongo documents
+        URL data = new URL(Routes.COUNTRY_CODES_COORDINATES_CSV);
+        BufferedReader in = new BufferedReader(new InputStreamReader(data.openStream()));
+        String inputLine;
+
+        int lineNumber = 0;
+        while ((inputLine = in.readLine()) != null) {
+            lineNumber++;
+            if (lineNumber == 1) continue;  // skipping header
+            String[] lineSplit = inputLine.split("\", ");
+            String isoCode = lineSplit[1].replace('"', ' ').trim();
+            String latitude = lineSplit[4].replace('"', ' ').trim();
+            String longitude = lineSplit[5].replace('"', ' ').trim();
+
+            BasicDBList coordinates = new BasicDBList();
+            coordinates.add(longitude);
+            coordinates.add(latitude);
+
+            BasicDBObject location = new BasicDBObject("type", "Point");
+            location.put("coordinates", coordinates);
+            BasicDBObject set = new BasicDBObject("$set", new BasicDBObject("location", location));
+
+            MongoCollection<Document> collection = database.getCollection("countries");
+            UpdateResult updateResult = collection.updateOne(new BasicDBObject("isoCode", isoCode), set);
+        }
+        in.close();
     }
 
     public static <T> void writeManyToCollection(String collectionName, List<T> objects) {
