@@ -3,7 +3,17 @@ package configuration;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.TextNode;
 import io.github.cdimascio.dotenv.Dotenv;
+import io.javalin.config.JavalinConfig;
+import io.javalin.openapi.JsonSchemaLoader;
+import io.javalin.openapi.JsonSchemaResource;
+import io.javalin.openapi.plugin.OpenApiPlugin;
+import io.javalin.openapi.plugin.OpenApiPluginConfiguration;
+import io.javalin.openapi.plugin.swagger.SwaggerConfiguration;
+import io.javalin.openapi.plugin.swagger.SwaggerPlugin;
+
+import java.util.function.Consumer;
 
 public class Configuration {
     public static final ObjectMapper mapper = new ObjectMapper()
@@ -15,5 +25,43 @@ public class Configuration {
 
     public static final Dotenv ENV = Dotenv.load();
     public static final boolean IS_MULTILINGUAL = "multilingual".equalsIgnoreCase(ENV.get("PROFILE"));
+
+    public static Consumer<JavalinConfig> appConfig = config -> {
+        config.plugins.register(openApiPluginConfig());
+        config.plugins.register(swaggerPluginConfig());
+        // Get schemes annotated with @JsonScheme annotation
+        for (JsonSchemaResource generatedJsonSchema : new JsonSchemaLoader().loadGeneratedSchemes()) {
+            System.out.println(generatedJsonSchema.getName());
+            System.out.println(generatedJsonSchema.getContentAsString());
+        }
+    };
+
+    private static OpenApiPlugin openApiPluginConfig() {
+        return new OpenApiPlugin(new OpenApiPluginConfiguration()
+                        .withDocumentationPath("/openapi.json")
+                        .withDefinitionConfiguration((version, definition) -> definition
+                                .withOpenApiInfo((openApiInfo) -> {
+                                    openApiInfo.setTitle("Awesome App");
+                                    openApiInfo.setVersion("1.0.0");
+                                })
+                                .withServer((openApiServer) -> {
+                                    openApiServer.setUrl(("http://localhost:7070/"));
+                                    //openApiServer.setDescription("Server description goes here");
+                                    //openApiServer.addVariable("port", "7070", new String[]{"7070", "8080"}, "Port of the server");
+                                    //openApiServer.addVariable("basePath", "", new String[]{"", "v1"}, "Base path of the server");
+                                })
+                                .withDefinitionProcessor((content -> { // you can add whatever you want to this document using your favourite json api
+                                    content.set("test", new TextNode("Value"));
+                                    return content.toPrettyString();
+                                }))
+                        ));
+    }
+
+    private static SwaggerPlugin swaggerPluginConfig() {
+        String deprecatedDocsPath = "/openapi.json"; // by default it's /openapi
+        SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
+        swaggerConfiguration.setDocumentationPath(deprecatedDocsPath);
+        return new SwaggerPlugin(swaggerConfiguration);
+    }
 }
 
