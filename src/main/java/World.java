@@ -1,11 +1,14 @@
 import controller.CityController;
 import controller.CountryController;
+import controller.WorldController;
 import exception.NotFoundException;
+import exception.SearchException;
 import io.javalin.Javalin;
 import io.javalin.plugin.bundled.CorsPluginConfig;
 import persistence.WorldDB;
 
 import java.io.IOException;
+import java.util.List;
 
 
 public class World {
@@ -16,11 +19,12 @@ public class World {
         var app = Javalin.create(config -> config.plugins.enableCors(cors -> cors.add(CorsPluginConfig::anyHost)))
                 .start(7070);
 
-        // Exception Handler
-        app.exception(NotFoundException.class, (e, ctx) -> {
+        // Exception handling
+        List<Class<? extends Exception>> badRequestExceptions = List.of(NotFoundException.class, SearchException.class);
+        badRequestExceptions.forEach(ex -> app.exception(ex, (e, ctx) -> {
             ctx.status(400);
             ctx.json(e.getMessage());
-        });
+        }));
 
         // WELCOME
         app.get("/", context -> context.result("Welcome to World proxy"));
@@ -39,6 +43,15 @@ public class World {
 
         // SINGLE CITY DETAILS
         app.get("/city/{name}", CityController.fetchCityByName);
+
+        // WORLD LANGUAGES
+        app.get("/world/languages", WorldController.fetchLanguages);
+
+        // WORLD CURRENCIES
+        app.get("/world/currencies", WorldController.fetchCurrencies);
+
+        // WORLD CAPITALS
+        app.get("/world/capitals", WorldController.fetchCapitals);
     }
 }
 
