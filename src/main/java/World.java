@@ -1,11 +1,12 @@
+import configuration.Configuration;
 import controller.CityController;
 import controller.CountryController;
 import controller.WorldController;
 import exception.NotFoundException;
 import exception.SearchException;
 import io.javalin.Javalin;
-import io.javalin.plugin.bundled.CorsPluginConfig;
 import persistence.WorldDB;
+import util.Api;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,7 +17,12 @@ public class World {
         // invoke all countries and store them in MongoDB
         WorldDB.init();
 
-        var app = Javalin.create(config -> config.plugins.enableCors(cors -> cors.add(CorsPluginConfig::anyHost)))
+//        var app = Javalin.create(config -> config.plugins.enableCors(cors -> cors.add(CorsPluginConfig::anyHost)))
+//                .start(7070);
+
+        String deprecatedDocsPath = "/openapi.json"; // by default it's /openapi
+
+        Javalin app = Javalin.create(Configuration.appConfig)
                 .start(7070);
 
         // Exception handling
@@ -30,10 +36,11 @@ public class World {
         app.get("/", context -> context.result("Welcome to World proxy"));
 
         // ALL COUNTRIES
-        app.get("/country/all", CountryController.fetchAllCountries);
+
+        app.get(Api.Internal.ALL_COUNTRIES, CountryController.fetchAllCountries);
 
         // COUNTRY BY NAME
-        app.get("/country/{name}", CountryController.fetchCountryByName);
+        app.get(Api.Internal.COUNTRY_DETAILS, CountryController.fetchCountryByName);
 
         //  COUNTRY FILTERS
         app.post("/country/search", CountryController.fetchCountries);

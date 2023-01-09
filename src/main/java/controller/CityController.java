@@ -9,6 +9,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
 import persistence.WorldDB;
+import util.Api;
 import util.SimpleClient;
 
 import java.util.List;
@@ -16,15 +17,13 @@ import java.util.Map;
 import java.util.Objects;
 
 import static configuration.Configuration.*;
-import static util.Routes.API_NINJA_BASE_URL;
-import static util.Routes.COUNTRIESNOW_BASE_URL;
 
 public class CityController {
 
     public static Handler fetchCitiesByCountry = ctx -> {
         String countryName = ctx.pathParam("country");
         Country country = WorldDB.retrieveCountry(countryName);
-        Request request = SimpleClient.buildRequest(COUNTRIESNOW_BASE_URL + "/q?country=" + country.getName());
+        Request request = SimpleClient.buildRequest(Api.External.COUNTRIESNOW_BASE_URL + "/q?country=" + country.getName());
         Response response = SimpleClient.makeRequest(request);
         CountryCitiesExternalResponse mappedResponse = simpleMapper
                 .readValue(Objects.requireNonNull(response.body()).string(), new TypeReference<>(){});
@@ -36,7 +35,7 @@ public class CityController {
         String apiKey = ENV.get("NINJA_API_KEY");
         Map<String, String> headers = Map.of("x-api-key", Objects.requireNonNull(apiKey));
         String cityName = ctx.pathParam("name");
-        String url = API_NINJA_BASE_URL + "?name=" + cityName;
+        String url = Api.External.API_NINJA_BASE_URL + "?name=" + cityName;
         Request request = SimpleClient.buildRequest(url, headers);
         Response response = SimpleClient.makeRequest(request);
         JSONArray jsonArray = new JSONArray(Objects.requireNonNull(response.body()).string());

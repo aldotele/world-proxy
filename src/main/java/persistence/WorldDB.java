@@ -19,7 +19,7 @@ import model.CountrySearch;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.bson.Document;
-import util.Routes;
+import util.Api;
 import util.SimpleClient;
 
 import java.io.BufferedReader;
@@ -47,14 +47,14 @@ public class WorldDB {
 
     public static void init() throws JsonMappingException, JsonProcessingException, IOException {
         // retrieving all countries and writing to mongo
-        Request request = SimpleClient.buildRequest(Routes.REST_COUNTRIES_BASE_URL + "/all");
+        Request request = SimpleClient.buildRequest(Api.External.REST_COUNTRIES_BASE_URL + "/all");
         Response response = SimpleClient.makeRequest(request);
         List<Country> allCountries = Arrays.asList(mapper.readValue(Objects.requireNonNull(response.body()).string(), Country[].class));
         WorldDB.createCollection("countries");
         WorldDB.writeManyToCollection("countries", allCountries);
 
         // retrieving countries coordinates and updating mongo documents
-        URL data = new URL(Routes.COUNTRY_CODES_COORDINATES_CSV);
+        URL data = new URL(Api.External.COUNTRY_CODES_COORDINATES_CSV);
         BufferedReader in = new BufferedReader(new InputStreamReader(data.openStream()));
         String inputLine;
 
