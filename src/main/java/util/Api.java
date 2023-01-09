@@ -2,7 +2,7 @@ package util;
 
 public class Api {
     public static class Internal {
-        public static final String ALL_COUNTRIES = "/countries/all";
+        public static final String ALL_COUNTRIES = "/country/all";
         public static final String COUNTRY_DETAILS = "/country/{name}";
     }
 

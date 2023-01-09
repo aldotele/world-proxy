@@ -31,4 +31,4 @@ Some of the available features are:
 
 ### Run with Docker
 
-[WIP]
+`docker compose up`
