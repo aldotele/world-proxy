@@ -1,12 +1,12 @@
 import configuration.Configuration;
 import controller.CityController;
 import controller.CountryController;
-import controller.Path;
 import controller.WorldController;
 import exception.NotFoundException;
 import exception.SearchException;
 import io.javalin.Javalin;
 import persistence.WorldDB;
+import util.Api;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,10 +37,10 @@ public class World {
 
         // ALL COUNTRIES
 
-        app.get(Path.ALL_COUNTRIES, CountryController.fetchAllCountries);
+        app.get(Api.Internal.ALL_COUNTRIES, CountryController.fetchAllCountries);
 
         // COUNTRY BY NAME
-        app.get(Path.COUNTRY_DETAILS, CountryController.fetchCountryByName);
+        app.get(Api.Internal.COUNTRY_DETAILS, CountryController.fetchCountryByName);
 
         //  COUNTRY FILTERS
         app.post("/country/search", CountryController.fetchCountries);
