@@ -6,12 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.config.JavalinConfig;
-import io.javalin.openapi.JsonSchemaLoader;
-import io.javalin.openapi.JsonSchemaResource;
 import io.javalin.openapi.plugin.OpenApiPlugin;
 import io.javalin.openapi.plugin.OpenApiPluginConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerPlugin;
+import io.javalin.plugin.bundled.CorsPluginConfig;
 
 import java.util.function.Consumer;
 
@@ -27,13 +26,17 @@ public class Configuration {
     public static final boolean IS_MULTILINGUAL = "multilingual".equalsIgnoreCase(ENV.get("PROFILE"));
 
     public static Consumer<JavalinConfig> appConfig = config -> {
+        // openApi
         config.plugins.register(openApiPluginConfig());
+        // swagger
         config.plugins.register(swaggerPluginConfig());
+        // cors
+        config.plugins.enableCors(cors -> cors.add(CorsPluginConfig::anyHost));
         // Get schemes annotated with @JsonScheme annotation
-        for (JsonSchemaResource generatedJsonSchema : new JsonSchemaLoader().loadGeneratedSchemes()) {
-            System.out.println(generatedJsonSchema.getName());
-            System.out.println(generatedJsonSchema.getContentAsString());
-        }
+//        for (JsonSchemaResource generatedJsonSchema : new JsonSchemaLoader().loadGeneratedSchemes()) {
+//            System.out.println(generatedJsonSchema.getName());
+//            System.out.println(generatedJsonSchema.getContentAsString());
+//        }
     };
 
     private static OpenApiPlugin openApiPluginConfig() {
@@ -41,7 +44,7 @@ public class Configuration {
                         .withDocumentationPath("/openapi.json")
                         .withDefinitionConfiguration((version, definition) -> definition
                                 .withOpenApiInfo((openApiInfo) -> {
-                                    openApiInfo.setTitle("Awesome App");
+                                    openApiInfo.setTitle("World Proxy");
                                     openApiInfo.setVersion("1.0.0");
                                 })
                                 .withServer((openApiServer) -> {
