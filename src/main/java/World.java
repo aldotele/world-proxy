@@ -40,7 +40,7 @@ public class World {
         app.get(Path.ALL_COUNTRIES, CountryController.fetchAllCountries);
 
         // COUNTRY BY NAME
-        app.get("/country/{name}", CountryController.fetchCountryByName);
+        app.get(Path.COUNTRY_DETAILS, CountryController.fetchCountryByName);
 
         //  COUNTRY FILTERS
         app.post("/country/search", CountryController.fetchCountries);
