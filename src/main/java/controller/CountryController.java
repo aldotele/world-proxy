@@ -2,8 +2,7 @@ package controller;
 
 import configuration.Configuration;
 import io.javalin.http.Handler;
-import io.javalin.openapi.OpenApi;
-import io.javalin.openapi.OpenApiParam;
+import io.javalin.openapi.*;
 import model.Country;
 import model.CountrySearch;
 import persistence.WorldDB;
@@ -27,6 +26,13 @@ public class CountryController {
         ctx.json(country);
     };
 
+    @OpenApi(summary = "get countries with filter", path = Api.Internal.COUNTRY_SEARCH,
+            methods = HttpMethod.POST,
+            requestBody = @OpenApiRequestBody(
+            content = {
+                    @OpenApiContent(from = CountrySearch.class)
+            }
+    ))
     public static Handler fetchCountries = ctx -> {
       String body = ctx.body();
       CountrySearch search = Configuration.simpleMapper.readValue(body, CountrySearch.class);

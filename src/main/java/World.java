@@ -43,7 +43,7 @@ public class World {
         app.get(Api.Internal.COUNTRY_DETAILS, CountryController.fetchCountryByName);
 
         //  COUNTRY FILTERS
-        app.post("/country/search", CountryController.fetchCountries);
+        app.post(Api.Internal.COUNTRY_SEARCH, CountryController.fetchCountries);
 
         // ALL CITIES BY COUNTRY
         app.get("/city/in/{country}", CityController.fetchCitiesByCountry);
