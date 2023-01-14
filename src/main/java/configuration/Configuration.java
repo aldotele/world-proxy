@@ -23,7 +23,6 @@ public class Configuration {
             .disable(MapperFeature.USE_ANNOTATIONS);
 
     public static final Dotenv ENV = Dotenv.load();
-    public static final boolean IS_MULTILINGUAL = "multilingual".equalsIgnoreCase(ENV.get("PROFILE"));
 
     public static Consumer<JavalinConfig> appConfig = config -> {
         // openApi

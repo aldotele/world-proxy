@@ -17,11 +17,6 @@ public class World {
         // invoke all countries and store them in MongoDB
         WorldDB.init();
 
-//        var app = Javalin.create(config -> config.plugins.enableCors(cors -> cors.add(CorsPluginConfig::anyHost)))
-//                .start(7070);
-
-        String deprecatedDocsPath = "/openapi.json"; // by default it's /openapi
-
         Javalin app = Javalin.create(Configuration.appConfig)
                 .start(7070);
 
