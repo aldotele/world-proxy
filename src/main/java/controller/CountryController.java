@@ -36,7 +36,13 @@ public class CountryController {
     public static Handler fetchCountries = ctx -> {
       String body = ctx.body();
       CountrySearch search = Configuration.simpleMapper.readValue(body, CountrySearch.class);
-      List<Country> filtered = WorldDB.retrieveCountries(search);
-      ctx.json(filtered);
+        String onlyAcronyms = ctx.queryParam("onlyAcronym");
+        if ("true".equals(onlyAcronyms)) {
+            List<String> acronyms = WorldDB.retrieveCountriesAcronyms(search);
+            ctx.json(acronyms);
+        } else {
+            List<Country> filtered = WorldDB.retrieveCountries(search);
+            ctx.json(filtered);
+        }
     };
 }

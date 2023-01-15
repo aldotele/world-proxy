@@ -19,6 +19,7 @@ import model.CountrySearch;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.bson.Document;
+import org.jetbrains.annotations.NotNull;
 import util.Api;
 import util.SimpleClient;
 
@@ -144,6 +145,33 @@ public class WorldDB {
      */
     public static List<Country> retrieveCountries(CountrySearch search) throws JsonProcessingException, SearchException {
         MongoCollection<Document> collection = database.getCollection("countries");
+        BasicDBList conditions = buildQueryConditions(search);
+
+        String queryResult = collection.find(new BasicDBObject("$and", conditions))
+                .projection(Projections.excludeId())
+                .map(Document::toJson)
+                .into(new ArrayList<>())
+                .toString();
+
+        List<Country> allCountries = simpleMapper.readValue(queryResult, new TypeReference<>(){});
+
+        return allCountries;
+    }
+
+    public static List<String> retrieveCountriesAcronyms(CountrySearch search) throws JsonProcessingException, SearchException {
+        MongoCollection<Document> collection = database.getCollection("countries");
+        BasicDBList conditions = buildQueryConditions(search);
+
+        List<String> filtered = collection
+                .distinct("acronym", String.class)
+                .filter(new BasicDBObject("$and", conditions))
+                .into(new ArrayList<>());
+
+        return filtered;
+    }
+
+    @NotNull
+    private static BasicDBList buildQueryConditions(CountrySearch search) throws SearchException {
         BasicDBList conditions = new BasicDBList();
 
         // population range
@@ -183,16 +211,7 @@ public class WorldDB {
         if (conditions.isEmpty()) {
             throw new SearchException("at least one valid search criteria is needed.");
         }
-
-        String queryResult = collection.find(new BasicDBObject("$and", conditions))
-                .projection(Projections.excludeId())
-                .map(Document::toJson)
-                .into(new ArrayList<>())
-                .toString();
-
-        List<Country> allCountries = simpleMapper.readValue(queryResult, new TypeReference<>(){});
-
-        return allCountries;
+        return conditions;
     }
 
     public static String retrieveEnglishCountryName(String countryName) {
