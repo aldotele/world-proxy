@@ -19,26 +19,26 @@ import model.CountrySearch;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.bson.Document;
-import org.jetbrains.annotations.NotNull;
 import util.Api;
 import util.SimpleClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.util.*;
-import java.util.regex.Pattern;
 
 import static configuration.Configuration.*;
-import static util.RegexUtil.exactIgnoreCase;
 
 @Slf4j
 public class WorldDB {
     static String DB_NAME = "world";
     static MongoClient mongoClient;
     static MongoDatabase database;
+
+    private static class Collection {
+        private static final String COUNTRIES = "countries";
+    }
 
     static {
         // when launching docker compose, db host will be mongo, otherwise localhost
@@ -60,6 +60,8 @@ public class WorldDB {
         String inputLine;
 
         int lineNumber = 0;
+
+        // TODO refactor avoiding while loop
         while ((inputLine = in.readLine()) != null) {
             lineNumber++;
             if (lineNumber == 1) continue;  // skipping header
@@ -113,8 +115,11 @@ public class WorldDB {
         }
     }
 
-    public static List<Country> retrieveAll(String collectionName) throws JsonProcessingException {
-        MongoCollection<Document> collection = database.getCollection(collectionName);
+    /**
+     * retrieves all world countries
+     */
+    public static List<Country> retrieveCountries() throws JsonProcessingException {
+        MongoCollection<Document> collection = database.getCollection(Collection.COUNTRIES);
         ArrayList<String> found = collection.find().projection(Projections.excludeId())
                 .map(Document::toJson)
                 .into(new ArrayList<>());
@@ -122,8 +127,11 @@ public class WorldDB {
         return allCountries;
     }
 
+    /**
+     * retrieves a country by name
+     */
     public static Country retrieveCountry(String countryName) throws JsonProcessingException, NotFoundException {
-        MongoCollection<Document> collection = database.getCollection("countries");
+        MongoCollection<Document> collection = database.getCollection(Collection.COUNTRIES);
         String countryNameCapitalized = countryName.substring(0, 1).toUpperCase() +
                 countryName.substring(1).toLowerCase();
         // retrieving the country from whatever language
@@ -139,13 +147,10 @@ public class WorldDB {
 
     /**
      * retrieves all countries that match the filter criteria
-     * @param search
-     * @return list of countries
-     * @throws JsonProcessingException
      */
     public static List<Country> retrieveCountries(CountrySearch search) throws JsonProcessingException, SearchException {
-        MongoCollection<Document> collection = database.getCollection("countries");
-        BasicDBList conditions = buildQueryConditions(search);
+        MongoCollection<Document> collection = database.getCollection(Collection.COUNTRIES);
+        BasicDBList conditions = QueryBuilder.buildQueryConditions(search);
 
         String queryResult = collection.find(new BasicDBObject("$and", conditions))
                 .projection(Projections.excludeId())
@@ -158,9 +163,12 @@ public class WorldDB {
         return allCountries;
     }
 
-    public static List<String> retrieveCountriesAcronyms(CountrySearch search) throws JsonProcessingException, SearchException {
-        MongoCollection<Document> collection = database.getCollection("countries");
-        BasicDBList conditions = buildQueryConditions(search);
+    /**
+     * retrieves the list of iso2 codes of the countries that match the filter criteria
+     */
+    public static List<String> retrieveCountriesAcronyms(CountrySearch search) throws SearchException {
+        MongoCollection<Document> collection = database.getCollection(Collection.COUNTRIES);
+        BasicDBList conditions = QueryBuilder.buildQueryConditions(search);
 
         List<String> filtered = collection
                 .distinct("acronym", String.class)
@@ -170,52 +178,11 @@ public class WorldDB {
         return filtered;
     }
 
-    @NotNull
-    private static BasicDBList buildQueryConditions(CountrySearch search) throws SearchException {
-        BasicDBList conditions = new BasicDBList();
-
-        // population range
-        BigDecimal maxPopulation = search.getMaxPopulation();
-        if (maxPopulation != null) conditions.add(new BasicDBObject("population", new BasicDBObject("$lt", maxPopulation)));
-        BigDecimal minPopulation = search.getMinPopulation();
-        if (minPopulation != null) conditions.add(new BasicDBObject("population", new BasicDBObject("$gt", minPopulation)));
-
-        // spoken languages
-        List<String> languages = search.getLanguages();
-        if (languages != null) {
-            for (String language: languages) {
-                conditions.add(new BasicDBObject("languages", exactIgnoreCase(language)));
-            }
-        }
-
-        // borders
-        List<String> borders = search.getBorders();
-        if (borders != null) {
-            for (String border: borders) conditions.add(new BasicDBObject("borders", border));
-        }
-
-        // name regex
-        String nameRegex = search.getNameRegex();
-        if (nameRegex != null) {
-            Pattern namePattern = Pattern.compile(nameRegex, Pattern.CASE_INSENSITIVE);
-            conditions.add(new BasicDBObject("name", new BasicDBObject("$regex", namePattern)));
-        }
-
-        // capital regex
-        String capitalRegex = search.getCapitalRegex();
-        if (capitalRegex != null) {
-            Pattern capitalPattern = Pattern.compile(capitalRegex, Pattern.CASE_INSENSITIVE);
-            conditions.add(new BasicDBObject("capital", new BasicDBObject("$regex", capitalPattern)));
-        }
-
-        if (conditions.isEmpty()) {
-            throw new SearchException("at least one valid search criteria is needed.");
-        }
-        return conditions;
-    }
-
+    /**
+     * retrieves the english country name
+     */
     public static String retrieveEnglishCountryName(String countryName) {
-        MongoCollection<Document> collection = database.getCollection("countries");
+        MongoCollection<Document> collection = database.getCollection(Collection.COUNTRIES);
         String countryNameCapitalized = countryName.substring(0, 1).toUpperCase() +
                 countryName.substring(1).toLowerCase();
         Document document = collection.find(new BasicDBObject("translations", countryNameCapitalized)).first();
@@ -225,20 +192,29 @@ public class WorldDB {
         return null;
     }
 
-    public static List<String> retrieveLanguages(String collectionName) {
-        MongoCollection<Document> collection = database.getCollection("countries");
+    /**
+     * retrieves all the languages spoken in the world
+     */
+    public static List<String> retrieveLanguages() {
+        MongoCollection<Document> collection = database.getCollection(Collection.COUNTRIES);
         return collection.distinct("languages", String.class)
                 .into(new ArrayList<>());
     }
 
-    public static List<String> retrieveCurrencies(String collectionName) {
-        MongoCollection<Document> collection = database.getCollection("countries");
+    /**
+     * retrieves all currencies of the world
+     */
+    public static List<String> retrieveCurrencies() {
+        MongoCollection<Document> collection = database.getCollection(Collection.COUNTRIES);
         return collection.distinct("currencies", String.class)
                 .into(new ArrayList<>());
     }
 
-    public static List<String> retrieveCapitals(String countries) {
-        MongoCollection<Document> collection = database.getCollection("countries");
+    /**
+     * retrieves all capitals of the world
+     */
+    public static List<String> retrieveCapitals() {
+        MongoCollection<Document> collection = database.getCollection(Collection.COUNTRIES);
         return collection.distinct("capital", String.class)
                 .into(new ArrayList<>());
     }

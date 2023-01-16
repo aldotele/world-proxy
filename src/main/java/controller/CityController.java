@@ -1,7 +1,10 @@
 package controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import exception.NotFoundException;
 import io.javalin.http.Handler;
+import io.javalin.openapi.OpenApi;
+import io.javalin.openapi.OpenApiParam;
 import model.City;
 import model.Country;
 import model.external.CountryCitiesExternalResponse;
@@ -31,6 +34,8 @@ public class CityController {
         ctx.json(countryCities);
     };
 
+    @OpenApi(summary = "Get city details", path = Api.Internal.CITY_DETAILS,
+            pathParams = @OpenApiParam(name = "name", description = "city name", required = true))
     public static Handler fetchCityByName = ctx -> {
         String apiKey = ENV.get("NINJA_API_KEY");
         Map<String, String> headers = Map.of("x-api-key", Objects.requireNonNull(apiKey));
@@ -40,12 +45,11 @@ public class CityController {
         Response response = SimpleClient.makeRequest(request);
         JSONArray jsonArray = new JSONArray(Objects.requireNonNull(response.body()).string());
 
-        if (jsonArray.length() > 0) {
-            City city = mapper.readValue(jsonArray.get(0).toString(), City.class);
-            ctx.json(city);
-        } else {
-            throw new Exception();
-        }
+        if (jsonArray.toList().isEmpty()) throw new NotFoundException(cityName);
+
+        City city = mapper.readValue(jsonArray.get(0).toString(), City.class);
+        ctx.json(city);
+
     };
 
 }

@@ -14,7 +14,7 @@ public class CountryController {
 
     @OpenApi(summary = "Get a list of all world countries", path = Api.Internal.ALL_COUNTRIES)
     public static Handler fetchAllCountries = ctx -> {
-        List<Country> countries = WorldDB.retrieveAll("countries");
+        List<Country> countries = WorldDB.retrieveCountries();
         ctx.json(countries);
     };
 

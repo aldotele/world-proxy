@@ -44,7 +44,7 @@ public class World {
         app.get("/city/in/{country}", CityController.fetchCitiesByCountry);
 
         // SINGLE CITY DETAILS
-        app.get("/city/{name}", CityController.fetchCityByName);
+        app.get(Api.Internal.CITY_DETAILS, CityController.fetchCityByName);
 
         // WORLD LANGUAGES
         app.get("/world/languages", WorldController.fetchLanguages);
