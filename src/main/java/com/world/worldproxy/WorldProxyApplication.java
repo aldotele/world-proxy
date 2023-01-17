@@ -1,6 +1,8 @@
 package com.world.worldproxy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 import com.world.worldproxy.entity.CountryTranslation;
 import com.world.worldproxy.model.Country;
 import com.world.worldproxy.repository.CountryTranslationRepository;
@@ -21,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 
 @SpringBootApplication
@@ -73,6 +76,11 @@ class MultilingualRunner implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		MongoClient mongoClient = new MongoClient(Optional.ofNullable(ENV.get("MONGO_HOST")).orElse("localhost"), 27017);
+		MongoDatabase database = mongoClient.getDatabase("world");
+
+
+
 		Connection connection = DriverManager.getConnection(datasourceUrl, datasourceUsername, datasourcePassword);
 
 		String countryTranslationTable = "country_translation";
