@@ -6,6 +6,7 @@ import com.world.worldproxy.exception.NotFoundException;
 import com.world.worldproxy.model.Country;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class CountryServiceImpl implements CountryService {
     RestTemplate restTemplate;
 
     @Autowired
+    @Qualifier("mapper")
     ObjectMapper objectMapper;
 
     @Value("${restcountries.base.url}")

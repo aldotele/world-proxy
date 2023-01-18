@@ -2,7 +2,9 @@ package com.world.worldproxy.persistence;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.mongodb.BasicDBList;
@@ -24,7 +26,6 @@ import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
@@ -36,22 +37,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.world.worldproxy.config.Configuration.restTemplate;
+import static com.world.worldproxy.config.Configuration.simpleMapper;
+
 @Slf4j
-@Component
 public class WorldDB {
-    @Autowired
-    RestTemplate restTemplate;
-
-    @Autowired
-    @Qualifier("mapper")
-    ObjectMapper mapper;
-
-    @Autowired
-    @Qualifier("simpleMapper")
-    static ObjectMapper simpleMapper;
-
-    @Autowired
-    Dotenv env;
+    ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);;
 
     static String DB_NAME = "world";
     static MongoClient mongoClient;
@@ -63,7 +54,7 @@ public class WorldDB {
 
     public void init() throws JsonMappingException, JsonProcessingException, IOException {
         // when launching docker compose, db host will be mongo, otherwise localhost
-        mongoClient = new MongoClient(Optional.ofNullable(env.get("MONGO_HOST")).orElse("localhost"), 27017);
+        mongoClient = new MongoClient(Optional.ofNullable(Dotenv.load().get("MONGO_HOST")).orElse("localhost"), 27017);
         database = mongoClient.getDatabase(DB_NAME);
 
         // retrieving all countries and writing to mongo
