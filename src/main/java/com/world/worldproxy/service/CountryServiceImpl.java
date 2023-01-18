@@ -1,8 +1,8 @@
-package com.world.worldproxy.service.country;
+package com.world.worldproxy.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.world.worldproxy.exception.CountryNotFoundException;
+import com.world.worldproxy.exception.NotFoundException;
 import com.world.worldproxy.model.Country;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +36,14 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public Country getCountry(String countryName) throws JsonProcessingException, CountryNotFoundException {
+    public Country getCountry(String countryName) throws JsonProcessingException, NotFoundException {
         try {
             ResponseEntity<String> response = restTemplate.getForEntity(restCountriesBaseUrl + "/name/" + countryName, String.class);
             JSONArray jsonArray = new JSONArray(response.getBody());
             Country country = objectMapper.readValue(jsonArray.get(0).toString(), Country.class);
             return country;
         } catch (HttpClientErrorException.NotFound e) {
-            throw new CountryNotFoundException(countryName);
+            throw new NotFoundException(countryName);
         }
     }
 

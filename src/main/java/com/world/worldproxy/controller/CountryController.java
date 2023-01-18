@@ -1,10 +1,10 @@
 package com.world.worldproxy.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.world.worldproxy.exception.CountryNotFoundException;
+import com.world.worldproxy.exception.NotFoundException;
 import com.world.worldproxy.model.Country;
-import com.world.worldproxy.routing.Api;
-import com.world.worldproxy.service.country.CountryService;
+import com.world.worldproxy.util.Api;
+import com.world.worldproxy.service.CountryService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,7 +32,7 @@ public class CountryController {
 
     @Operation(description = "Get single country by name")
     @GetMapping("/{countryName}")
-    Country getCountry(@PathVariable String countryName) throws JsonProcessingException, CountryNotFoundException {
+    Country getCountry(@PathVariable String countryName) throws JsonProcessingException, NotFoundException {
         return countryService.getCountry(countryName);
     }
 }

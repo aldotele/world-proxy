@@ -17,7 +17,7 @@ import com.world.worldproxy.exception.SearchException;
 import com.world.worldproxy.model.Country;
 import com.world.worldproxy.model.CountrySearch;
 import com.world.worldproxy.persistence.util.QueryBuilder;
-import com.world.worldproxy.routing.Api;
+import com.world.worldproxy.util.Api;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
