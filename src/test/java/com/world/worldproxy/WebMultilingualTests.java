@@ -3,7 +3,7 @@ package com.world.worldproxy;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.entity.CountryTranslation;
-import com.world.worldproxy.repository.CountryTranslationRepository;
+import com.world.worldproxy.persistence.CountryTranslationRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

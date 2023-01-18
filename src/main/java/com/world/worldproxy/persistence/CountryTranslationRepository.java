@@ -1,4 +1,4 @@
-package com.world.worldproxy.repository;
+package com.world.worldproxy.persistence;
 
 import com.world.worldproxy.entity.CountryTranslation;
 import org.springframework.data.jpa.repository.JpaRepository;

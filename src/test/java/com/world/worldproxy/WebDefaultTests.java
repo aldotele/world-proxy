@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.worldproxy.entity.CountryTranslation;
 import com.world.worldproxy.model.City;
-import com.world.worldproxy.repository.CountryTranslationRepository;
+import com.world.worldproxy.persistence.CountryTranslationRepository;
 import com.world.worldproxy.service.country.CountryService;
 import org.json.JSONArray;
 import org.junit.jupiter.api.Assertions;

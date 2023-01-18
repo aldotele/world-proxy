@@ -20,6 +20,7 @@ public class Country implements Serializable {
     private String officialName;
     @Schema(example = "ITA")
     private String acronym;
+    private String isoCode;
     private String capital;
     private List<String> borders;
     @Schema(example = "https://goo.gl/maps/8M1K27TDj7StTRTq8")
@@ -31,6 +32,12 @@ public class Country implements Serializable {
     private String flag;
     private List<String> languages;
     private List<String> translations;
+    private Location location;
+
+    @JsonProperty("cca2")
+    private void retrieveIsoCode(String isoCode) {
+        this.isoCode = isoCode;
+    }
 
     @SuppressWarnings("unchecked")
     @JsonProperty("name")

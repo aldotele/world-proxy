@@ -1,7 +1,8 @@
-package com.world.worldproxy.repository.util;
+package com.world.worldproxy.persistence.util;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import com.world.worldproxy.exception.SearchException;
 import com.world.worldproxy.model.CountrySearch;
 
 import javax.validation.constraints.NotNull;

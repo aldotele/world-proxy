@@ -1,7 +1,7 @@
 package com.world.worldproxy.service.multilingual;
 
 import com.world.worldproxy.entity.CountryTranslation;
-import com.world.worldproxy.repository.CountryTranslationRepository;
+import com.world.worldproxy.persistence.CountryTranslationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
